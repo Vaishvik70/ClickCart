@@ -11,6 +11,10 @@ import Product from "./components/Product";
 import store from "./store/store";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/Cart";
+import Payment from "./pages/Payment";
+import Receipt from "./pages/Receipt";
+import History from "./pages/History";
 import "./index.css";
 
 const App = () => {
@@ -26,6 +30,10 @@ const App = () => {
           <Route path="/product" element={<Product />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/receipt" element={<Receipt />} />
+          <Route path="/history" element={<History />} />
         </Routes>
         <Footer />
       </Router>

@@ -9,7 +9,7 @@ const Product = ({ product, addToCart, buyNow }) => {
         className="w-full h-40 object-contain mb-4"
       />
       <h3 className="text-lg font-semibold">{product.name}</h3>
-      <p className="text-gray-600">${product.price}</p>
+      <p className="text-gray-600">₹{product.price}</p>
       {product.sale > 0 && (
         <p className="text-red-500">Sale: {product.sale}% Off</p>
       )}

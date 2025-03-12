@@ -1,30 +1,54 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Client, Databases, ID } from "appwrite";
 
-const ProductCard = ({ product }) => {
-  if (!product) {
-    return null; // Prevents rendering if product is undefined
-  }
+const client = new Client();
+client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
+const databases = new Databases(client);
+const DATABASE_ID = "67cad7e600027ac7e8c0";
+const COLLECTION_ID = "67cad7ff0005fc97c570";
+
+export default function ProductCard({ product }) {
+  const navigate = useNavigate();
+
+  const addToCart = async () => {
+    try {
+      await databases.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
+        name: product.name || product.title,  // Change to match Appwrite field name
+        price: Math.round(product.price),
+        image: product.image,
+        quantity: 1,
+      });
+  
+      alert("Product added to cart!");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Failed to add product to cart!");
+    }
+  };
+  
 
   return (
-    <div className="bg-white shadow-md p-4 rounded-lg">
-      <Link to={`/product/${product.id}`} className="block">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-40 object-cover rounded-md"
-        />
-        <h3 className="text-lg font-semibold mt-2">{product.title}</h3>
-      </Link>
-      <p className="text-gray-600">${product.price}</p>
-      {product.onSale && (
-        <p className="text-red-500 font-bold">Sale: {product.discount}% Off</p>
-      )}
-      <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+    <div 
+      className="border p-4 rounded-lg shadow-lg cursor-pointer"
+      onClick={() => navigate(`/product/${product.id}`)}
+    >
+      <img 
+        src={product.image} 
+        alt={product.name} 
+        className="w-full h-48 object-cover rounded"
+      />
+      <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+      <p className="text-gray-600">₹{product.price}</p>
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent triggering the navigation when clicking the button
+          addToCart();
+        }}
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+      >
         Add to Cart
       </button>
     </div>
   );
-};
-
-export default ProductCard;
+}

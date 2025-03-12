@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const SaleProductCard = ({ product }) => {
+  const navigate = useNavigate();
+
   // Ensure product object has all required properties
   if (!product) {
     return <div className="text-white">No product available</div>;
@@ -15,9 +18,16 @@ const SaleProductCard = ({ product }) => {
       />
       <h3 className="text-lg font-semibold text-white">{product.title}</h3>
       <p className="text-red-400 font-bold">
-        Sale Price: ${product.price - (product.price * product.discount) / 100}
+        Sale Price: ₹{product.price - (product.price * product.discount) / 100}
       </p>
-      <p className="text-gray-400 line-through">Original: ${product.price}</p>
+      <p className="text-gray-400 line-through">Original: ₹{product.price}</p>
+
+      <button
+        onClick={() => navigate("/payment", { state: { product } })}
+        className="bg-red-500 text-white py-2 px-4 rounded"
+      >
+        Buy Now
+      </button>
     </div>
   );
 };

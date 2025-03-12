@@ -15,12 +15,15 @@ const Header = () => {
       </Link>
 
       {/* Navbar Links */}
-      <div className="space-x-4">
-        <Link to="/products" className="hover:text-gray-400">
+      <div className="mr-4 space-x-4">
+        <Link to="/products" className="hover:text-gray-400 mr-2">
           Products
         </Link>
         <Link to="/cart" className="hover:text-gray-400 flex items-center space-x-1">
           🛒 <span>Cart</span>
+        </Link>
+        <Link to="/history" className="hover:text-gray-400">
+          History
         </Link>
       </div>
     </nav>
