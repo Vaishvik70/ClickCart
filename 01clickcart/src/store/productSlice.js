@@ -10,6 +10,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/71n4BPDmUNL._SL1500_.jpg",
       onSale: "true",
       discount: "15",
+      colors: ["black", "white", "gold"],
     },
     { 
       id: "2",
@@ -37,6 +38,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61nxQ62qglL._SL1500_.jpg",
       onSale: "true",
       discount: "5",
+      colors: ["black", "white", "gold"],
     },
     { 
       id: "5",
@@ -91,6 +93,8 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/41xlIZwU5KL._SX679_.jpg",
       onSale: "false",
       discount: "0",
+      colors: ["red", "blue", "black"], // Add colors here
+      sizes: ["S", "M", "L", "XL"], // Add sizes here
     },
     { 
       id: "11",
@@ -143,6 +147,42 @@ const initialState = {
       price: "359",
       category: "Women's shoes",
       image: "https://m.media-amazon.com/images/I/61izjVVYJpL._SX695_.jpg",
+      onSale: "true",
+      discount: "18",
+    },
+    { 
+      id: "17",
+      title: "Herry Potter", 
+      price: "3999",
+      category: "Books",
+      image: "https://m.media-amazon.com/images/I/81uRUnI9Y3L.jpg",
+      onSale: "true",
+      discount: "18",
+    },
+    { 
+      id: "18",
+      title: "The Best of Sherlock Holmes", 
+      price: "359",
+      category: "Books",
+      image: "https://m.media-amazon.com/images/I/51SVi8gKijL._SR480,440_.jpg",
+      onSale: "true",
+      discount: "18",
+    },
+    { 
+      id: "19",
+      title: "Solo Leveling Vol 1", 
+      price: "359",
+      category: "Books",
+      image: "https://rukminim2.flixcart.com/image/1200/1200/xif0q/book/a/z/o/solo-leveling-vol-1-manga-original-imahy5kn373ztysh.jpeg",
+      onSale: "true",
+      discount: "10",
+    },
+    { 
+      id: "20",
+      title: "Marvel's Avengers", 
+      price: "359",
+      category: "Books",
+      image: "https://m.media-amazon.com/images/I/71GLZcjDNKL._SL1280_.jpg",
       onSale: "true",
       discount: "18",
     },

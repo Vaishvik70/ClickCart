@@ -3,8 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Client, Databases, ID } from "appwrite";
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1")
-      .setProject("67cad786002fe394c8a8");
+client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
 const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const COLLECTION_ID = "67cad7ff0005fc97c570";
@@ -14,7 +13,7 @@ export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
   const { product, cart } = location.state || {};
-  
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -30,16 +29,30 @@ export default function Payment() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const calculateFinalPrice = (item) => {
+    return item.price - (item.price * (item.discount || 0)) / 100;
+  };
+
+  const totalPriceBeforeDiscount = product
+    ? product.price
+    : cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
+
+  const totalPriceAfterDiscount = product
+    ? calculateFinalPrice(product)
+    : cart?.reduce((total, item) => total + calculateFinalPrice(item) * item.quantity, 0) || 0;
+
   const saveOrderToHistory = async () => {
     try {
       const orderData = {
         name: formData?.name,
         paymentMethod: formData?.paymentMethod,
-        totalPrice: totalPrice,
-        date: new Date().toISOString(),
-        products: product ? [product] : cart || [],
-        image: product?.image,
-        price: product?.price,
+        totalPrice: totalPriceAfterDiscount,
+        date: new Date().toISOString().slice(0, 12),
+        products: JSON.stringify(cart?.map((item) => ({
+          name: item.name,
+          price: calculateFinalPrice(item),
+          image: item.image || "",
+        })) || []),
       };
       await databases.createDocument(DATABASE_ID, HISTORY_COLLECTION_ID, ID.unique(), orderData);
       console.log("Order saved successfully in history");
@@ -66,32 +79,25 @@ export default function Payment() {
     console.log("Payment Details:", formData);
     console.log("Products Purchased:", product || cart);
     alert("Payment Successful!");
-    
+
     await saveOrderToHistory();
-    
+
     if (cart) {
       await clearCart();
     }
-    
-    const totalPrice = product
-      ? product.price
-      : cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
-    
-    navigate("/receipt", { state: { formData, product, cart, totalPrice } });
-  };
 
-  const totalPrice = product
-    ? product.price
-    : cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
+    navigate("/receipt", { state: { formData, product, cart, totalPriceAfterDiscount } });
+  };
 
   return (
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">Payment</h1>
-      
+
       {product ? (
         <div className="border p-4 rounded shadow mb-4">
           <h2 className="text-lg font-semibold">{product.name}</h2>
           <p>Price: ₹{product.price}</p>
+          <p className="text-green-500 font-bold">Discounted Price: ₹{calculateFinalPrice(product)}</p>
           <img src={product.image} alt={product.name} className="w-32 h-32 object-cover rounded mt-2" />
         </div>
       ) : cart ? (
@@ -99,15 +105,20 @@ export default function Payment() {
           <div key={item.id || item.$id} className="border p-4 rounded shadow mb-2">
             <h2 className="text-lg font-semibold">{item.name}</h2>
             <p>Price: ₹{item.price} x {item.quantity}</p>
+            <p className="text-green-500 font-bold">
+              Discounted Price: ₹{calculateFinalPrice(item)} x {item.quantity}
+            </p>
             <img src={item.image} alt={item.name} className="w-32 h-32 object-cover rounded mt-2" />
           </div>
         ))
       ) : (
         <p>No products selected for payment.</p>
       )}
-      
-      <h2 className="text-xl font-bold mt-4">Total Price: ₹{totalPrice}</h2>
-      
+
+      <h2 className="text-xl font-bold mt-4">Final Bill</h2>
+      <p className="text-gray-400">Total Before Discount: ₹{totalPriceBeforeDiscount}</p>
+      <p className="text-green-500 font-bold">Total After Discount: ₹{totalPriceAfterDiscount}</p>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded" required />
         <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="w-full p-2 border rounded" required />

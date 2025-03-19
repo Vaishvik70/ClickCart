@@ -7,7 +7,7 @@ const Header = () => {
       {/* Logo */}
       <Link to="/" className="flex items-center space-x-2">
         <img
-          src="https://files.oaiusercontent.com/file-2f7sFegjkfFvDjFnFsT1jy?se=2025-03-10T12%3A33%3A20Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D76c6b04e-64a5-4299-b425-741bd5149bcd.webp&sig=G5Bqzqo%2BWs4N5kmAdG0qfhKrgU9Qm2bG70YcBJHesJ0%3D" // Replace with your actual logo URL
+          src="https://files.oaiusercontent.com/file-2f7sFegjkfFvDjFnFsT1jy?se=2025-03-18T06%3A25%3A10Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D76c6b04e-64a5-4299-b425-741bd5149bcd.webp&sig=J6lQsHoQP6xFjM78rE1eCNUulSBpn69USP3eU%2BEUhO8%3D" // Replace with your actual logo URL
           alt="ClickCart Logo"
           className="w-12 h-12"
         />
@@ -16,14 +16,14 @@ const Header = () => {
 
       {/* Navbar Links */}
       <div className="mr-4 space-x-4">
-        <Link to="/products" className="hover:text-gray-400 mr-2">
+        <Link to="/products" className="hover:text-gray-400">
           Products
         </Link>
-        <Link to="/cart" className="hover:text-gray-400 flex items-center space-x-1">
+        <Link to="/cart" className="hover:text-gray-400 flex space-x-1">
           🛒 <span>Cart</span>
         </Link>
-        <Link to="/history" className="hover:text-gray-400">
-          History
+        <Link to="/best-selling" className="hover:text-gray-400 flex"> 
+          Best Selling
         </Link>
       </div>
     </nav>

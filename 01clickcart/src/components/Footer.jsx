@@ -1,57 +1,29 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SaleProductCard from "./SaleProductCard";
-
-const saleProducts = [
-  {
-    id: 1,
-    image: "https://images.pexels.com/photos/205926/pexels-photo-205926.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    title: "Wireless Headphones",
-    price: 100,
-    discount: 20,
-  },
-  {
-    id: 2,
-    image: "https://images.pexels.com/photos/2779018/pexels-photo-2779018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    title: "Smartwatch",
-    price: 200,
-    discount: 30,
-  },
-  {
-    id: 3,
-    image: "https://images.pexels.com/photos/8000624/pexels-photo-8000624.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=252&fit=crop&h=408",
-    title: "Bluetooth Speaker",
-    price: 150,
-    discount: 25,
-  },
-  {
-    id: 4,
-    image: "https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=600",
-    title: "Gaming Mouse",
-    price: 80,
-    discount: 15,
-  },
-];
+import Hero from "./Hero";
+import Testimonials from "./Testimonials";
 
 const sliderSettings = {
   dots: false,
   infinite: true,
   speed: 500,
-  slidesToShow: 3, // Show 3 slides on desktop
+  slidesToShow: 3,
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 3000,
   responsive: [
     {
-      breakpoint: 1024, // For tablets
+      breakpoint: 1024,
       settings: {
         slidesToShow: 2,
       },
     },
     {
-      breakpoint: 768, // For mobile
+      breakpoint: 768,
       settings: {
         slidesToShow: 1,
       },
@@ -60,9 +32,12 @@ const sliderSettings = {
 };
 
 const Footer = () => {
+  const saleProducts = useSelector((state) => state.saleProducts?.saleProducts || []); // ✅ Corrected
+
   return (
     <footer className="bg-gray-800 text-white p-6 mt-10">
-      <div className="max-w-7xl mx-auto text-center"> {/* Adjust width */}
+      <Hero />
+      <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-xl font-bold mb-4">🔥 Sale Products 🔥</h2>
         <Slider {...sliderSettings} className="overflow-hidden">
           {saleProducts.map((product) => (
@@ -71,7 +46,14 @@ const Footer = () => {
             </div>
           ))}
         </Slider>
+        <div>
+          <p className="mt-6 text-gray-400 text-sm">
+            © {new Date().getFullYear()} Click Cart. Created by{" "}
+            <span className="text-blue-400 font-semibold">Vaishvik</span>
+          </p>
+        </div>
       </div>
+      <Testimonials />
     </footer>
   );
 };
