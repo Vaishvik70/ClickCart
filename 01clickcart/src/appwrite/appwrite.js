@@ -1,21 +1,39 @@
 import { Client, Account, Databases, ID } from "appwrite";
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1") // Correct API endpoint
-      .setProject("67cad786002fe394c8a8"); // Your actual Project ID
+client
+  .setEndpoint("https://cloud.appwrite.io/v1") // Correct Appwrite endpoint
+  .setProject("67cad786002fe394c8a8"); // Your actual Project ID
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export { ID };
+
+// 🚀 Fix: Seller Database & Collection IDs
+const DATABASE_ID = "67cad7e...";  // Replace with your actual Database ID
+const SELLER_COLLECTION_ID = "67ea22e...";  // Replace with your actual Collection ID
 
 /**
- * Register a new user
+ * ✅ Register a new seller
  */
 export const register = async (name, email, password) => {
   try {
     const newUser = await account.create(ID.unique(), email, password, name);
     console.log("✅ User Registered:", newUser);
-    
-    return newUser; // No auto-login, just return the user
+
+    // 🔹 Store Seller Info in the Database
+    await databases.createDocument(
+      DATABASE_ID,
+      SELLER_COLLECTION_ID,
+      ID.unique(),
+      {
+        businessName: name,
+        email: email,
+        userId: newUser.$id, // Store the registered user ID
+      }
+    );
+
+    return newUser;
   } catch (error) {
     console.error("❌ Registration Error:", error);
     return null;
@@ -23,11 +41,18 @@ export const register = async (name, email, password) => {
 };
 
 /**
- * Login a user
+ * ✅ Login a seller
  */
 export const login = async (email, password) => {
   try {
-    // ✅ Fix: Correct function name for login
+    // 🔹 Fix: Log out any existing session before logging in
+    try {
+      await account.deleteSession("current");
+      console.log("✅ Removed existing session");
+    } catch (err) {
+      console.warn("⚠️ No active session to remove");
+    }
+
     const session = await account.createEmailPasswordSession(email, password);
     console.log("✅ Login Successful:", session);
     return session;
@@ -38,27 +63,23 @@ export const login = async (email, password) => {
 };
 
 /**
- * Logout user
+ * ✅ Logout user
  */
 export const logout = async () => {
   try {
-    const session = await account.getSession("current"); // Check if a session exists
-    if (session) {
-      await account.deleteSession("current"); // Log out only if a session exists
-      console.log("✅ Logout Successful");
-    }
+    await account.deleteSession("current");
+    console.log("✅ Logout Successful");
   } catch (error) {
     console.error("❌ Logout Error:", error.message);
   }
 };
 
-
 /**
- * Fetch products from Appwrite Database
+ * ✅ Fetch products from Appwrite Database
  */
 export const getProducts = async () => {
   try {
-    const response = await databases.listDocuments("YOUR_DATABASE_ID", "YOUR_COLLECTION_ID");
+    const response = await databases.listDocuments(DATABASE_ID, "YOUR_COLLECTION_ID");
     console.log("✅ Products Fetched:", response.documents);
     return response.documents;
   } catch (error) {

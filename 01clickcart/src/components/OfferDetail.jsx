@@ -6,14 +6,14 @@ const offersWithProducts = {
   1: [
     {
       id: 1,
-      image: "https://images.pexels.com/photos/2779018/pexels-photo-2779018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: "https://cdn.shopify.com/s/files/1/0356/9850/7909/files/zeb-Gemini-banner8.jpg?v=1697106712",
       title: "Smartwatch",
       price: 2000,
       discount: 50, // 50% OFF
     },
     {
       id: 2,
-      image: "https://images.pexels.com/photos/240677/pexels-photo-240677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: "https://oneclickshopping.pk/wp-content/uploads/2022/03/Untitled-1_1-379.jpg",
       title: "Fitness Band",
       price: 1500,
       discount: 40, // 40% OFF
@@ -22,17 +22,49 @@ const offersWithProducts = {
   2: [
     {
       id: 3,
-      image: "https://images.pexels.com/photos/205926/pexels-photo-205926.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: "https://m.media-amazon.com/images/I/41JACWT-wWL._AC_UF1000,1000_QL80_.jpg",
       title: "Wireless Headphones",
       price: 3000,
       discount: 50, // 50% OFF
     },
     {
       id: 4,
-      image: "https://images.pexels.com/photos/1068255/pexels-photo-1068255.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: "https://m.media-amazon.com/images/I/61Sst7zTNCL.jpg",
       title: "Gaming Headset",
       price: 4000,
       discount: 35, // 35% OFF
+    },
+  ],
+  3: [
+    {
+      id: 5,
+      image: "https://m.media-amazon.com/images/I/51LxT4iSWPL._AC_UY350_.jpg",
+      title: "Kurti",
+      price: 2000,
+      discount: 45,
+    },
+    {
+      id: 6,
+      image: "https://m.media-amazon.com/images/I/81z2IicIjUL._AC_UY1100_.jpg",
+      title: "Shirt",
+      price: 3000,
+      discount: 30,
+    },
+  ],
+  4: [
+    {
+      id: 7,
+      image: "https://images-eu.ssl-images-amazon.com/images/I/81+ceFx9BcL._AC_UL900_SR900,600_.jpg",
+      title: "Crime Fiction",
+      price: 300,
+      discount: 45,
+    },
+    {
+      id: 8,
+      image: "https://m.media-amazon.com/images/I/71K58ScrmbL._AC_UL480_QL65_.jpg",
+      title: "Economics Fiction",
+      price: 700,
+      discount: 50,
     },
   ],
 };

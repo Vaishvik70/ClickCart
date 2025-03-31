@@ -49,6 +49,7 @@ const Register = () => {
           required
           className="w-full p-2 mb-3 rounded bg-gray-700"
         />
+        <p className="text-xs text-gray-400 mb-3">Password must be 8-16 characters</p>
         <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 p-2 rounded">
           Register
         </button>

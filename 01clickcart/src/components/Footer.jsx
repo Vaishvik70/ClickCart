@@ -1,57 +1,46 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import SaleProductCard from "./SaleProductCard";
-import Hero from "./Hero";
 import Testimonials from "./Testimonials";
-
-const sliderSettings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 3000,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
+import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const Footer = () => {
-  const saleProducts = useSelector((state) => state.saleProducts?.saleProducts || []); // ✅ Corrected
-
   return (
     <footer className="bg-gray-800 text-white p-6 mt-10">
-      <Hero />
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-xl font-bold mb-4">🔥 Sale Products 🔥</h2>
-        <Slider {...sliderSettings} className="overflow-hidden">
-          {saleProducts.map((product) => (
-            <div key={product.id} className="px-2">
-              <SaleProductCard product={product} />
-            </div>
-          ))}
-        </Slider>
-        <div>
-          <p className="mt-6 text-gray-400 text-sm">
-            © {new Date().getFullYear()} Click Cart. Created by{" "}
-            <span className="text-blue-400 font-semibold">Vaishvik</span>
-          </p>
+        {/* Navigation Links */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">Quick Links</h3>
+          <div className="flex justify-center space-x-6 mt-3">
+            <Link to="/" className="hover:text-blue-400">Home</Link>
+            <Link to="/about" className="hover:text-blue-400">About Us</Link>
+            <Link to="/contact" className="hover:text-blue-400">Contact Us</Link>
+            <Link to="/help" className="hover:text-blue-400">Help</Link>
+          </div>
         </div>
+
+        {/* Social Media Links */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">Connect with Us</h3>
+          <div className="flex justify-center space-x-6 mt-3">
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-blue-500 hover:text-blue-600">
+              <FaFacebookF />
+              <span>Facebook</span>
+            </a>
+            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-blue-400 hover:text-blue-500">
+              <FaTwitter />
+              <span>Twitter</span>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-pink-500 hover:text-pink-600">
+              <FaInstagram />
+              <span>Instagram</span>
+            </a>
+          </div>
+        </div>
+
+        <p className="mt-6 text-gray-400 text-sm">
+          © {new Date().getFullYear()} Click Cart. Created by{" "}
+          <span className="text-blue-400 font-semibold">Vaishvik</span>
+        </p>
       </div>
       <Testimonials />
     </footer>
