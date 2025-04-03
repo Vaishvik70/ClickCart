@@ -33,11 +33,17 @@ export default function ProductCard({ product }) {
       className="border p-4 rounded-lg shadow-lg cursor-pointer"
       onClick={() => navigate(`/product/${product.id}`)}
     >
-      <img 
-        src={product.image} 
-        alt={product.name} 
-        className="w-full h-48 object-cover rounded"
-      />
+      {product.image ? (
+        <img 
+          src={product.image} 
+          alt={product.title || "Product Image"} 
+          className="w-full h-48 object-cover rounded"
+        />
+        ) : (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center rounded">
+        <span className="text-gray-500">No Image</span>
+        </div>
+      )}
       <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
       <p className="text-gray-600">₹{product.price}</p>
       <button

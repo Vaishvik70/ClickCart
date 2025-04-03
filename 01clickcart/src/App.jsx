@@ -26,6 +26,7 @@ import SellerPage from "./pages/SellerPage";
 import FeesAndCommission from "./seller/Fees & Commission";
 import SellerRegister from "./seller/SellerRegister";
 import SellerLogin from "./seller/SellerLogin";
+import AddProduct from "./seller/AddProduct";
 import "./index.css";
 
 const App = () => {
@@ -71,6 +72,7 @@ const App = () => {
           <Route path="/fees-commission" element={<FeesAndCommission />} />
           <Route path="/seller-register" element={<SellerRegister />} />
           <Route path="/seller-login" element={<SellerLogin />} />
+          <Route path="/add-product" element={<AddProduct />} />
         </Routes>
         <Footer />
       </Router>

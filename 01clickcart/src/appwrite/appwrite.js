@@ -12,9 +12,9 @@ export const databases = new Databases(client);
 export const storage = new Storage(client);
 export { ID, Query };
 
-// 🔹 Replace with your actual IDs
+// 🔹 Your Appwrite Configurations (Replace with actual IDs)
 const DATABASE_ID = "67cad7e600027ac7e8c0"; // Your Database ID
-const SELLER_COLLECTION_ID = "67ea22e0000abcxyz"; // Your Seller Collection ID
+const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04"; // Your Seller Collection ID
 const PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b"; // Your Product Collection ID
 const STORAGE_BUCKET_ID = "67cad81f00268d3093c5"; // Your Storage Bucket ID
 
@@ -23,6 +23,7 @@ const STORAGE_BUCKET_ID = "67cad81f00268d3093c5"; // Your Storage Bucket ID
  */
 export const register = async (name, email, password) => {
   try {
+    // Create a new user in Appwrite Authentication
     const newUser = await account.create(ID.unique(), email, password, name);
     console.log("✅ User Registered:", newUser);
 
@@ -32,9 +33,9 @@ export const register = async (name, email, password) => {
       SELLER_COLLECTION_ID,
       ID.unique(),
       {
-        businessName: name,
+        name: name, // Ensure "name" exists in Appwrite schema
         email: email,
-        userId: newUser.$id,
+        userId: newUser.$id, // Store the Appwrite user ID
       }
     );
 
@@ -100,11 +101,13 @@ export const addProduct = async (product) => {
   try {
     let imageId = "";
 
+    // Upload Image if Provided
     if (product.image) {
       const file = await storage.createFile(STORAGE_BUCKET_ID, ID.unique(), product.image);
       imageId = file.$id;
     }
 
+    // Store Product in Database
     const newProduct = await databases.createDocument(
       DATABASE_ID,
       PRODUCT_COLLECTION_ID,

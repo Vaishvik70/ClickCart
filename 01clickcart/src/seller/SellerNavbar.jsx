@@ -38,6 +38,10 @@ const Navbar = () => {
         <Link to="/fees-commission" className="mr-4 text-blue-600 hover:underline">
           Fees & Commission
         </Link>
+        <Link to="/add-product" className="mr-4 text-blue-600 hover:underline">
+          Add Product
+        </Link>
+
 
         {seller ? (
           // ✅ Show seller name & logout button if logged in
