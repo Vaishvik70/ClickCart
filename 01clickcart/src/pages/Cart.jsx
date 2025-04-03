@@ -103,17 +103,13 @@ export default function Cart() {
         </button>
       
         <button  
-          onClick={() => {
-            if (cart.length === 0) {
-              alert("Cart is empty!");
-              return;
-            }
-            navigate("/payment", { state: { cart } });
-          }} 
-          className="bg-red-500 text-white py-2 px-4 rounded"
-        >
-          Buy Now
-        </button>
+          onClick={() => navigate("/payment", { state: { cart } })} 
+          className={`py-2 px-4 rounded ${cart.length === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 text-white"}`}
+          disabled={cart.length === 0}
+>
+  Buy Now
+</button>
+
       </div>
     </div>
   );

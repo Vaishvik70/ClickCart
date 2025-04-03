@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { account } from "../appwrite/appwriteConfig";
+import { FiLogOut, FiUser, FiPackage, FiBarChart2, FiDollarSign } from "react-icons/fi";
 
-const Navbar = () => {
-  const [seller, setSeller] = useState(null);
+const SellerNavbar = ({ seller, setSeller }) => {
   const navigate = useNavigate();
-
-  // ✅ Check if the seller is logged in
-  useEffect(() => {
-    const fetchSeller = async () => {
-      try {
-        const user = await account.get(); // Get current seller session
-        setSeller(user);
-      } catch (error) {
-        console.log("No seller logged in");
-      }
-    };
-    fetchSeller();
-  }, []);
 
   const handleLogout = async () => {
     try {
-      await account.deleteSession("current"); // Logout seller
+      await account.deleteSession("current");
       setSeller(null);
       alert("Logged out successfully!");
       navigate("/seller-login");
@@ -31,40 +18,53 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white p-4 shadow-md flex justify-between items-center">
-      <h1 className="text-xl font-bold text-blue-600">Click Cart Seller Hub</h1>
+    <nav className="bg-gray-900 text-white p-4 flex justify-between items-center shadow-md">
+      <h1 className="text-2xl font-bold tracking-wide">
+        Seller Hub
+      </h1>
 
-      <div>
-        <Link to="/fees-commission" className="mr-4 text-blue-600 hover:underline">
-          Fees & Commission
+      <div className="flex gap-8">
+        <Link to="/seller-dashboard" className="hover:text-yellow-400 flex items-center gap-2">
+          <FiBarChart2 /> Dashboard
         </Link>
-        <Link to="/add-product" className="mr-4 text-blue-600 hover:underline">
-          Add Product
+        <Link to="/fees-commission" className="hover:text-yellow-400 flex items-center gap-2">
+          <FiDollarSign /> Fees & Commission
         </Link>
-
-
-        {seller ? (
-          // ✅ Show seller name & logout button if logged in
-          <div className="flex items-center gap-4">
-            <span className="text-lg font-semibold text-green-600">Welcome, {seller.name}!</span>
-            <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded text-white">
-              Logout
-            </button>
-          </div>
-        ) : (
-          // ✅ Show Login & Register buttons if not logged in
-          <>
-            <Link to="/seller-login" className="bg-blue-400 px-4 py-2 mr-3 rounded text-white">
-              Seller Login
-            </Link>
-            <Link to="/seller-register" className="bg-blue-400 px-4 py-2 rounded text-white">
-              Register as Seller
-            </Link>
-          </>
-        )}
+        <Link to="/seller-help" className="hover:text-yellow-400 flex items-center gap-2">
+          <FiDollarSign /> Seller Help
+        </Link>
       </div>
+
+      {seller ? (
+        <div className="flex items-center gap-6">
+          <span className="text-lg font-medium flex items-center gap-2 bg-green-600 px-3 py-1 rounded-lg">
+            <FiUser /> {seller.name || "Seller"}
+          </span>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-red-700 transition"
+          >
+            <FiLogOut /> Logout
+          </button>
+        </div>
+      ) : (
+        <div className="flex gap-4">
+          <Link
+            to="/seller-login"
+            className="bg-yellow-500 px-4 py-2 rounded-lg font-medium hover:bg-yellow-600 transition"
+          >
+            Login
+          </Link>
+          <Link
+            to="/seller-register"
+            className="bg-green-500 px-4 py-2 rounded-lg font-medium hover:bg-green-600 transition"
+          >
+            Register
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };
 
-export default Navbar;
+export default SellerNavbar;

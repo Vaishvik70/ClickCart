@@ -21,7 +21,7 @@ const SellerLogin = () => {
       // ✅ Use correct method for email-password login
       await account.createEmailPasswordSession(sellerLogin.email, sellerLogin.password);
       alert("Login successful!");
-      navigate("/seller-page"); // Redirect to Seller Dashboard
+      navigate("/seller-dashboard"); // Redirect to Seller Dashboard
     } catch (error) {
       console.error("Login failed:", error.message);
       alert("Login failed. Check your credentials and try again.");
