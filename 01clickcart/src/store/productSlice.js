@@ -192,7 +192,13 @@ const initialState = {
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    addSellerProducts: (state, action) => {
+      state.products.push(action.payload); // Add new product
+    },
+  },
 });
+
+export const { addSellerProducts } = productSlice.actions;
 
 export default productSlice.reducer;

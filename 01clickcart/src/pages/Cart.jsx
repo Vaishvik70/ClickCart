@@ -5,11 +5,12 @@ import { Client, Databases } from "appwrite";
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1")
       .setProject("67cad786002fe394c8a8");
+
 const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const COLLECTION_ID = "67cad7ff0005fc97c570";
 
-export default function Cart() {
+export default function Cart() { 
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
@@ -20,17 +21,21 @@ export default function Cart() {
   const fetchCart = async () => {
     try {
       const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
-      console.log("Cart items:", response.documents); // Debug log
+      console.log("Cart items:", response.documents);
       setCart(response.documents);
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
   };
 
-  const updateCart = async (id, quantity) => {
+  const updateCart = async (id, newQuantity) => {
     try {
-      await databases.updateDocument(DATABASE_ID, COLLECTION_ID, id, { quantity });
-      fetchCart();
+      await databases.updateDocument(DATABASE_ID, COLLECTION_ID, id, { quantity: newQuantity });
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.$id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
     } catch (error) {
       console.error("Error updating cart:", error);
     }
@@ -39,7 +44,7 @@ export default function Cart() {
   const removeFromCart = async (id) => {
     try {
       await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, id);
-      fetchCart();
+      setCart((prevCart) => prevCart.filter((item) => item.$id !== id));
     } catch (error) {
       console.error("Error removing item:", error);
     }
@@ -62,25 +67,51 @@ export default function Cart() {
                 <h2 className="text-lg font-semibold">{item.name}</h2>
                 <p className="text-gray-600">₹{item.price}</p>
                 <div className="flex items-center space-x-2 mt-2">
-                  <button onClick={() => updateCart(item.$id, Math.max(1, item.quantity - 1))} className="bg-gray-300 px-3 py-1 rounded">-</button>
+                  <button 
+                    onClick={() => updateCart(item.$id, Math.max(1, item.quantity - 1))} 
+                    className="bg-gray-300 px-3 py-1 rounded"
+                    disabled={item.quantity === 1}
+                  >
+                    -
+                  </button>
                   <span className="text-lg">{item.quantity}</span>
-                  <button onClick={() => updateCart(item.$id, item.quantity + 1)} className="bg-gray-300 px-3 py-1 rounded">+</button>
+                  <button 
+                    onClick={() => updateCart(item.$id, item.quantity + 1)} 
+                    className="bg-gray-300 px-3 py-1 rounded"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
-              <button onClick={() => removeFromCart(item.$id)} className="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
+              <button 
+                onClick={() => removeFromCart(item.$id)} 
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Remove
+              </button>
             </div>
           ))}
           <h2 className="text-xl font-bold mt-4">Total: ₹{totalAmount}</h2>
         </div>
       )}
       <div className="mt-4 flex justify-between">
-        <button onClick={() => navigate("/products")} 
-        className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button 
+          onClick={() => navigate("/products")} 
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+        >
           Back to Products
         </button>
       
-        <button  onClick={() => navigate("/payment", { state: { cart } })} 
-        className="bg-red-500 text-white py-2 px-4 rounded">
+        <button  
+          onClick={() => {
+            if (cart.length === 0) {
+              alert("Cart is empty!");
+              return;
+            }
+            navigate("/payment", { state: { cart } });
+          }} 
+          className="bg-red-500 text-white py-2 px-4 rounded"
+        >
           Buy Now
         </button>
       </div>

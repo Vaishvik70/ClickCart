@@ -35,32 +35,34 @@ const Home = () => {
 
   return (
     <div
-      className="bg-gray-900 text-white min-h-screen flex flex-col bg-no-repeat bg-center bg-contain"
+      className="bg-white text-blue-500 min-h-screen flex flex-col bg-no-repeat bg-center bg-contain overflow-x-hidden"
       style={{
         backgroundImage: "url('https://files.oaiusercontent.com/file-USgtpoWpy3ScPH776sJb2D?se=2025-03-13T09%3A14%3A09Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D7b20bd50-53ab-4f5e-bbdc-af1671a7e3b4.webp&sig=GSYu9dz1xkUZUeUaZTEhG3NLudhNHjfSo8Ibffyr848%3D')",
       }}
     >
-      {/* Sale Products Section (Moved Above Hero) */}
-      <div className="max-w-7xl mx-auto text-center py-10">
+      {/* Sale Products Section */}
+      <div className="max-w-7xl mx-auto text-center py-10 overflow-hidden">
         <h2 className="text-xl font-bold mb-4">🔥 Sale Products 🔥</h2>
-        <Slider {...sliderSettings} className="overflow-hidden">
-          {saleProducts.length > 0 ? (
-            saleProducts.map((product) => (
-              <div key={product.id} className="px-2">
-                <SaleProductCard product={product} />
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-400">No products on sale right now.</p>
-          )}
-        </Slider>
+        <div className="w-full overflow-hidden">
+          <Slider {...sliderSettings}>
+            {saleProducts.length > 0 ? (
+              saleProducts.map((product) => (
+                <div key={product.id} className="px-2">
+                  <SaleProductCard product={product} />
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400">No products on sale right now.</p>
+            )}
+          </Slider>
+        </div>
       </div>
 
-      {/* Hero Section (Now Below Sale Products) */}
+      {/* Hero Section */}
       <div className="max-w-7xl mx-auto text-center py-10">
         <h2 className="text-xl font-bold mb-4">🔥 Best Offers 🔥</h2>
       </div>
-        <Hero />
+      <Hero />
     </div>
   );
 };

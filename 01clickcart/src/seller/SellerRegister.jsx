@@ -1,120 +1,122 @@
 import React, { useState } from "react";
-import { account, databases, ID } from "../appwrite/appwrite"; // ✅ Corrected import
-import { DATABASE_ID, SELLER_COLLECTION_ID } from "../appwrite/appwriteConfig";
-
+import { useNavigate } from "react-router-dom";
+import { account, databases } from "../appwrite/appwriteConfig";
 
 const SellerRegister = () => {
-  const [formData, setFormData] = useState({
-    businessName: "",
+  const [sellerData, setSellerData] = useState({
+    name: "",
     email: "",
-    password: "",
-    confirmPassword: "",
+    phone: "",
+    address: "",
+    password: "", // Only for authentication, not stored in DB
+    storeName: "",
   });
 
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
 
-  // Handle form input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setSellerData({ ...sellerData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
-
     try {
-      // Step 1: Create a new user in Appwrite
-      const newUser = await account.create(ID.unique(), formData.email, formData.password);
-      console.log("✅ User Created:", newUser);
+      // ✅ 1. Create a new seller account in Appwrite Authentication
+      const user = await account.create(
+        crypto.randomUUID(), // Generates a unique user ID
+        sellerData.email,
+        sellerData.password,
+        sellerData.name
+      );
 
-      // Step 2: Store Seller Details in the Database
+      // ✅ 2. Store seller details in Appwrite Database (without password)
       await databases.createDocument(
-        DATABASE_ID,  // ✅ Using real Database ID
-        SELLER_COLLECTION_ID, // ✅ Using real Collection ID
-        ID.unique(),
+        "67cad7e600027ac7e8c0", // Replace with your Database ID
+        "67ea22e3000a9c49cd04", // Replace with your Collection ID
+        crypto.randomUUID(), // Unique document ID
         {
-          businessName: formData.businessName,
-          email: formData.email,
-          userId: newUser.$id,
+          userId: user.$id, // ✅ Store Appwrite user ID
+          name: sellerData.name,
+          email: sellerData.email,
+          phone: sellerData.phone,
+          address: sellerData.address,
+          storeName: sellerData.storeName,
         }
       );
 
-      setSuccess("🎉 Registration successful! Redirecting...");
-      setError(null);
+      alert("Registration successful! Please log in.");
+      navigate("/seller-login");
+    } catch (error) {
+      console.error("Registration failed:", error);
 
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        window.location.href = "/seller-login";
-      }, 2000);
-    } catch (err) {
-      console.error("❌ Registration Error:", err);
-      setError(err.message || "Failed to register. Try again.");
+      if (error.code === 409) {
+        alert("This email is already registered. Please log in.");
+      } else {
+        alert("Registration failed. Please try again.");
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+      <div className="bg-white p-8 rounded shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Seller Register</h2>
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        {success && <p className="text-green-500 text-sm mb-2">{success}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="businessName"
-            placeholder="Business Name"
-            className="w-full p-2 border rounded mb-2"
-            value={formData.businessName}
-            onChange={handleChange}
-            required
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input 
+            type="text" 
+            name="name" 
+            placeholder="Full Name" 
+            value={sellerData.name} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
           />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="w-full p-2 border rounded mb-2"
-            value={formData.email}
-            onChange={handleChange}
-            required
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Email" 
+            value={sellerData.email} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="w-full p-2 border rounded mb-2"
-            value={formData.password}
-            onChange={handleChange}
-            required
+          <input 
+            type="tel" 
+            name="phone" 
+            placeholder="Phone Number" 
+            value={sellerData.phone} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
           />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            className="w-full p-2 border rounded mb-2"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
+          <input 
+            type="text" 
+            name="address" 
+            placeholder="Address" 
+            value={sellerData.address} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
           />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Register
+          <input 
+            type="text" 
+            name="storeName" 
+            placeholder="Store Name" 
+            value={sellerData.storeName} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
+          />
+          <input 
+            type="password" 
+            name="password" 
+            placeholder="Password" 
+            value={sellerData.password} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded" required 
+          />
+          <button 
+            type="submit" 
+            className="w-full bg-blue-600 text-white p-2 rounded">
+            Register as Seller
           </button>
         </form>
-        <p className="mt-4 text-center text-sm">
-          Already have an account?
-          <a href="/seller-login" className="text-blue-500 hover:underline ml-1">
-            Login here
-          </a>
-        </p>
       </div>
     </div>
   );

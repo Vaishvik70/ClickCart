@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ cartCount }) => {
   const [isSellerMenuOpen, setIsSellerMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsSellerMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
@@ -19,46 +34,20 @@ const Header = () => {
       {/* Navbar Links */}
       <div className="inline-flex space-x-6 items-center">
         <Link to="/products" className="hover:text-gray-400">Products</Link>
-        <Link to="/cart" className="hover:text-gray-400 flex space-x-1">
+        
+        {/* Cart with Badge */}
+        <Link to="/cart" className="hover:text-gray-400 relative flex items-center space-x-1">
           🛒 <span>Cart</span>
-        </Link>
-        <Link to="/best-selling" className="hover:text-gray-400">Best Selling</Link>
-
-        {/* Seller Dropdown */}
-        <div className="relative">
-          <button
-            className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600 transition"
-            onClick={() => setIsSellerMenuOpen(!isSellerMenuOpen)}
-          >
-            Seller Portal ▼
-          </button>
-
-          {isSellerMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-50">
-              <Link 
-                to="/seller-register" 
-                className="block px-4 py-2 hover:bg-gray-200"
-                onClick={() => setIsSellerMenuOpen(false)}  // Closes dropdown after clicking
-              >
-                Seller Register
-              </Link>
-              <Link 
-                to="/seller-login" 
-                className="block px-4 py-2 hover:bg-gray-200"
-                onClick={() => setIsSellerMenuOpen(false)}
-              >
-                Seller Login
-              </Link>
-              <Link 
-                to="/seller-dashboard" 
-                className="block px-4 py-2 hover:bg-gray-200 border-t"
-                onClick={() => setIsSellerMenuOpen(false)}
-              >
-                Seller Dashboard
-              </Link>
-            </div>
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+              {cartCount}
+            </span>
           )}
-        </div>
+        </Link>
+        
+        <Link to="/best-selling" className="hover:text-gray-400">Best Selling</Link>
+        <Link to="/seller-page" className="hover:text-gray-400">Seller Page</Link>
+        
       </div>
     </nav>
   );

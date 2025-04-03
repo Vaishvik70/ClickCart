@@ -31,7 +31,7 @@ const offers = [
 
 const Hero = () => {
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center px-6">
+    <div className="bg-white text-blue-500 min-h-screen flex flex-col items-center justify-center px-6">
 
       {/* Offers Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">

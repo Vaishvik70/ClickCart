@@ -22,10 +22,10 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import BestSelling from "./components/BestSelling";
+import SellerPage from "./pages/SellerPage";
+import FeesAndCommission from "./seller/Fees & Commission";
 import SellerRegister from "./seller/SellerRegister";
-import SellerDashbord from "./seller/SellerDashbord";
 import SellerLogin from "./seller/SellerLogin";
-import SellerHome from "./seller/SellerHome";
 import "./index.css";
 
 const App = () => {
@@ -67,10 +67,10 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
           <Route path="/best-selling" element={<BestSelling />} />
+          <Route path="/seller-page" element={<SellerPage />} />
+          <Route path="/fees-commission" element={<FeesAndCommission />} />
           <Route path="/seller-register" element={<SellerRegister />} />
           <Route path="/seller-login" element={<SellerLogin />} />
-          <Route path="/seller-home" element={<SellerHome />} />
-          <Route path="/seller-dashboard" element={<SellerDashbord />} />
         </Routes>
         <Footer />
       </Router>
