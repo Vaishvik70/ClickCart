@@ -13,4 +13,4 @@ export const DATABASE_ID = "67cad7e600027ac7e8c0";
 
 export const account = new Account(client);  // ✅ Now it will work!
 export const storage = new Storage(client); // ✅ Import Storage for file uploads
-export { ID }
+export { ID }; 

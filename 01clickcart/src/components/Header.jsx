@@ -24,7 +24,7 @@ const Header = ({ cartCount }) => {
       {/* Logo */}
       <Link to="/" className="flex items-center space-x-2">
         <img
-          src="https://files.oaiusercontent.com/file-2f7sFegjkfFvDjFnFsT1jy?se=2025-03-27T04%3A50%3A19Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D76c6b04e-64a5-4299-b425-741bd5149bcd.webp&sig=K0b19r/H7NtoWwvSI11ukmmDumfHxxkiHytxkTD2f7I%3D"
+          src="https://files.oaiusercontent.com/file-2f7sFegjkfFvDjFnFsT1jy?se=2025-04-03T13%3A55%3A28Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D76c6b04e-64a5-4299-b425-741bd5149bcd.webp&sig=Kv6UEdJcDwSSiRy4qOFATSRwWSoPXlrVYiVqezQHyXc%3D"
           alt="ClickCart Logo"
           className="w-12 h-12"
         />

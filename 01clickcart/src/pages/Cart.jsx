@@ -106,9 +106,9 @@ export default function Cart() {
           onClick={() => navigate("/payment", { state: { cart } })} 
           className={`py-2 px-4 rounded ${cart.length === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 text-white"}`}
           disabled={cart.length === 0}
->
-  Buy Now
-</button>
+        >
+          Buy Now
+        </button>
 
       </div>
     </div>

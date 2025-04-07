@@ -1,49 +1,86 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function BestSelling() {
+// 🔁 Replace with your real images or local image paths
+const bestSellers = [
+  {
+    id: "1",
+    name: "Wireless Headphones",
+    image: "https://m.media-amazon.com/images/I/71RJCexaxiL._SL1500_.jpg",
+    price: 2499,
+    salesCount: 240,
+  },
+  {
+    id: "2",
+    name: "Smart Fitness Watch",
+    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSG6WTcrt627nj-iXl7flTB7yhJO7QDdUyPm4edjnoGTrB--yqazsDIlrvQpTjvLHV4CLoYrigzJNTaShu9Bx2Gg814PE38ZFwnSm5HTG5u",
+    price: 3499,
+    salesCount: 180,
+  },
+  {
+    id: "3",
+    name: "Bluetooth Speaker",
+    image: "https://m.media-amazon.com/images/I/41yQZFhJ-dL._SY300_SX300_QL70_FMwebp_.jpg",
+    price: 1999,
+    salesCount: 300,
+  },
+  {
+    id: "4",
+    name: "Laptop Stand",
+    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSDcaUBX4eSpvrNjqWhjPHTqhcPPelimQ3yRAGJpp3uimsdWpb9k74x3RwrCmyjjsLOE_sYoqojLQU1w-Inuiy1jXp9MoYJmTsA8vzz3xzHm6NTIoTGald6NQ",
+    price: 899,
+    salesCount: 120,
+  },
+];
+
+const BestSellingProducts = () => {
   const navigate = useNavigate();
 
-  // Get products from Redux store
-  const products = useSelector((state) => state.products?.products || []);
-
-  // Filter best-selling products (sort by highest sales)
-  const bestSellingProducts = [...products]
-    .filter((p) => p.sales && p.sales > 0) // Ensure product has sales data
-    .sort((a, b) => b.sales - a.sales) // Sort in descending order
+  const handleViewDetails = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-center mb-6">🔥 Best Selling Products</h1>
+    <div className="min-h-screen bg-white px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+        🔥 Best Seller Products
+      </h1>
 
-      {bestSellingProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {bestSellingProducts.map((product) => (
-            <div key={product.id} className="border rounded-lg shadow p-4">
-              <img src={product.image} alt={product.title} className="w-full h-48 object-cover rounded" />
-              <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
-              <p className="text-gray-700">₹{product.salePrice || product.price}</p>
-              <div className="mt-3 flex gap-2">
-                <button
-                  onClick={() => navigate(`/product/${product.id}`)}
-                  className="bg-blue-500 text-white py-1 px-4 rounded"
-                >
-                  View Details
-                </button>
-                <button
-                  onClick={() => navigate("/cart", { state: { product } })}
-                  className="bg-green-500 text-white py-1 px-4 rounded"
-                >
-                  Add to Cart
-                </button>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        {bestSellers.map((product, index) => (
+          <div
+            key={product.id}
+            className="relative bg-white border rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4"
+          >
+            <span className="absolute -top-4 -left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+              #{index + 1}
+            </span>
+
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-48 object-cover rounded-md"
+            />
+
+            <div className="mt-4">
+              <h2 className="text-lg font-semibold text-gray-800 truncate">
+                {product.name}
+              </h2>
+              <p className="text-gray-600 mt-1">₹{product.price}</p>
+              <p className="text-sm text-gray-400">Sold: {product.salesCount}</p>
             </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-500">No best-selling products available.</p>
-      )}
+
+            <button
+              onClick={() => handleViewDetails(product.id)}
+              className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md text-sm font-medium transition"
+            >
+              View Details
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default BestSellingProducts;

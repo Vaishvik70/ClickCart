@@ -16,10 +16,20 @@ const SellerLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      // ✅ Use correct method for email-password login
-      await account.createEmailPasswordSession(sellerLogin.email, sellerLogin.password);
+      // ✅ Delete any existing session to prevent session conflict
+      await account.deleteSession('current');
+    } catch (error) {
+      console.log("No existing session to delete.");
+    }
+
+    try {
+      // ✅ Log in the seller
+      await account.createEmailPasswordSession(
+        sellerLogin.email,
+        sellerLogin.password
+      );
       alert("Login successful!");
       navigate("/seller-dashboard"); // Redirect to Seller Dashboard
     } catch (error) {
@@ -39,7 +49,8 @@ const SellerLogin = () => {
             placeholder="Email" 
             value={sellerLogin.email} 
             onChange={handleChange} 
-            className="w-full p-2 border rounded" required 
+            className="w-full p-2 border rounded" 
+            required 
           />
           <input 
             type="password" 
@@ -47,7 +58,8 @@ const SellerLogin = () => {
             placeholder="Password" 
             value={sellerLogin.password} 
             onChange={handleChange} 
-            className="w-full p-2 border rounded" required 
+            className="w-full p-2 border rounded" 
+            required 
           />
           <button 
             type="submit" 
