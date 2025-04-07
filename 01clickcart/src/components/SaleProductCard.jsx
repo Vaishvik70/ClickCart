@@ -36,21 +36,21 @@ const SaleProductCard = ({ product }) => {
   const discountedPrice = product.price - (product.price * product.discount) / 100;
 
   return (
-    <div className="bg-gray-700 p-4 rounded-lg shadow-lg">
-      <img
-        src={product.image || "/placeholder.jpg"}
-        alt={product.title}
-        onError={(e) => (e.target.src = "/placeholder.jpg")}
-        className="w-full h-64 object-cover rounded cursor-pointer"
-        onClick={goToProductDetail}
-      />
-      <h2
-        className="text-white font-bold text-lg mt-2 cursor-pointer"
-        onClick={goToProductDetail}
-      >
+    <div className="w-full bg-gray-500 dark:bg-gray-800 p-4 rounded shadow-md flex flex-col items-center justify-between transition-transform duration-200 hover:scale-105">
+      <div className="w-full h-48 flex items-center justify-center overflow-hidden cursor-pointer" onClick={goToProductDetail}>
+        <img
+          src={product.image || "/placeholder.jpg"}
+          alt={product.title}
+          onError={(e) => (e.target.src = "/placeholder.jpg")}
+          className="h-full object-contain"
+        />
+      </div>
+
+      <h2 className="text-white font-bold text-lg mt-2 text-center cursor-pointer" onClick={goToProductDetail}>
         {product.title}
       </h2>
-      <p className="text-red-400 font-bold">Sale Price: ₹{discountedPrice}</p>
+
+      <p className="text-red-400 font-bold mt-1">Sale Price: ₹{discountedPrice}</p>
       <p className="text-gray-300 line-through">Original: ₹{product.price}</p>
 
       {loading ? (

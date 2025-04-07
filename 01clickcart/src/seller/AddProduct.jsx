@@ -30,17 +30,17 @@ const AddProduct = () => {
 
       if (imageFile) {
         const imageUpload = await storage.createFile(
-          "67cad81f00268d3093c5",
+          "67cad81f00268d3093c5", //Bucket ID
           ID.unique(),
           imageFile
         );
 
-        imageUrl = storage.getFileView("67cad81f00268d3093c5", imageUpload.$id);
+        imageUrl = storage.getFileView("67cad81f00268d3093c5", imageUpload.$id); // Bucket ID
       }
 
       await databases.createDocument(
-        "67cad7e600027ac7e8c0",
-        "67ea560f00044ac3e66b",
+        "67cad7e600027ac7e8c0", // Database ID
+        "67ea560f00044ac3e66b", // Product Collection ID
         ID.unique(),
         {
           title: productData.title,

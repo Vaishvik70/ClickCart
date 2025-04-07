@@ -111,7 +111,11 @@ const OfferDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <div key={product.id} className="bg-gray-100 p-4 rounded-lg shadow-lg">
-            <img src={product.image} alt={`Image of ${product.title}`} className="w-full h-48 object-cover rounded-md" />
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-60 object-contain rounded-md bg-white p-2"
+            />
             <h2 className="text-xl font-semibold mt-2">{product.title}</h2>
 
             {/* Pricing Section */}
