@@ -18,7 +18,7 @@ const SellerNavbar = ({ seller, setSeller }) => {
   };
 
   return (
-    <nav className="bg-gray-900 text-white p-4 flex justify-between items-center shadow-md">
+    <nav className="bg-white text-black p-4 flex justify-between items-center shadow-md">
       <h1 className="text-2xl font-bold tracking-wide">
         Seller Hub
       </h1>

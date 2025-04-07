@@ -9,14 +9,14 @@ const offersWithProducts = {
       image: "https://cdn.shopify.com/s/files/1/0356/9850/7909/files/zeb-Gemini-banner8.jpg?v=1697106712",
       title: "Smartwatch",
       price: 2000,
-      discount: 50, // 50% OFF
+      discount: 50,
     },
     {
       id: 2,
       image: "https://oneclickshopping.pk/wp-content/uploads/2022/03/Untitled-1_1-379.jpg",
       title: "Fitness Band",
       price: 1500,
-      discount: 40, // 40% OFF
+      discount: 40,
     },
   ],
   2: [
@@ -25,14 +25,14 @@ const offersWithProducts = {
       image: "https://m.media-amazon.com/images/I/41JACWT-wWL._AC_UF1000,1000_QL80_.jpg",
       title: "Wireless Headphones",
       price: 3000,
-      discount: 50, // 50% OFF
+      discount: 50,
     },
     {
       id: 4,
       image: "https://m.media-amazon.com/images/I/61Sst7zTNCL.jpg",
       title: "Gaming Headset",
       price: 4000,
-      discount: 35, // 35% OFF
+      discount: 35,
     },
   ],
   3: [
@@ -78,11 +78,29 @@ const OfferDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Get products related to the offer
-  const products = offersWithProducts[id] || [];
+  const isLoggedIn = !!localStorage.getItem("user"); // Login check
+
+  const products = offersWithProducts[parseInt(id)] || [];
+
+  const handleAddToCart = (product) => {
+    const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+    cartItems.push(product);
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+    alert("✅ Product added to cart!");
+  };
 
   if (products.length === 0) {
-    return <h2 className="text-red-500 text-center mt-10 text-2xl">⚠ No Products Found for this Offer!</h2>;
+    return (
+      <div className="text-center mt-10">
+        <h2 className="text-red-500 text-2xl">⚠ No Products Found for this Offer!</h2>
+        <button
+          onClick={() => navigate("/")}
+          className="mt-4 bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition"
+        >
+          ⬅ Back to Home
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -93,9 +111,9 @@ const OfferDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <div key={product.id} className="bg-gray-100 p-4 rounded-lg shadow-lg">
-            <img src={product.image} alt={product.title} className="w-full h-48 object-cover rounded-md" />
+            <img src={product.image} alt={`Image of ${product.title}`} className="w-full h-48 object-cover rounded-md" />
             <h2 className="text-xl font-semibold mt-2">{product.title}</h2>
-            
+
             {/* Pricing Section */}
             <p className="text-red-500 font-bold text-lg">
               ₹{getDiscountedPrice(product.price, product.discount)} <span className="text-sm">after discount</span>
@@ -103,20 +121,26 @@ const OfferDetail = () => {
             <p className="text-gray-500 line-through">₹{product.price}</p>
             <p className="text-green-600 font-bold">{product.discount}% OFF</p>
 
-            {/* Buttons */}
+            {/* Buttons or Login Message */}
             <div className="mt-4 flex flex-col gap-2">
-              <button 
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-                onClick={() => console.log("Added to Cart:", product)}
-              >
-                🛒 Add to Cart
-              </button>
-              <button 
-                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-                onClick={() => navigate("/payment", { state: { product } })}
-              >
-                💳 Buy Now
-              </button>
+              {isLoggedIn ? (
+                <>
+                  <button 
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    🛒 Add to Cart
+                  </button>
+                  <button 
+                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
+                    onClick={() => navigate("/payment", { state: { product } })}
+                  >
+                    💳 Buy Now
+                  </button>
+                </>
+              ) : (
+                <p className="text-red-600 font-medium text-center">⚠ Please login to use cart and buy features!</p>
+              )}
             </div>
           </div>
         ))}

@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -31,6 +32,7 @@ import SellerHelpPage from "./seller/SellerHelp";
 import SellerDashboard from "./seller/SellerDashboard";
 import SellerOrders from "./seller/SellerOrders";
 import SellerEarnings from "./seller/SellerEarnings";
+import Coupons from "./pages/Coupons";
 import "./index.css";
 
 const App = () => {
@@ -59,6 +61,7 @@ const App = () => {
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/product" element={<Product />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetails />} />
@@ -81,6 +84,7 @@ const App = () => {
           <Route path="/seller-dashboard" element={<SellerDashboard />} />
           <Route path="/seller-orders" element={<SellerOrders />} />
           <Route path="/seller-earnings" element={<SellerEarnings />} />
+          <Route path="/coupons" element={<Coupons />} />
         </Routes>
         <Footer />
       </Router>

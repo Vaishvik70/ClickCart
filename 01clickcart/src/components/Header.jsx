@@ -20,7 +20,7 @@ const Header = ({ cartCount }) => {
   }, []);
 
   return (
-    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <nav className="bg-white text-black p-4 flex justify-between items-center">
       {/* Logo */}
       <Link to="/" className="flex items-center space-x-2">
         <img
@@ -33,10 +33,10 @@ const Header = ({ cartCount }) => {
 
       {/* Navbar Links */}
       <div className="inline-flex space-x-6 items-center">
-        <Link to="/products" className="hover:text-gray-400">Products</Link>
+        <Link to="/products" className="hover:text-blue-500">Products</Link>
         
         {/* Cart with Badge */}
-        <Link to="/cart" className="hover:text-gray-400 relative flex items-center space-x-1">
+        <Link to="/cart" className="hover:text-blue-500 relative flex items-center space-x-1">
           🛒 <span>Cart</span>
           {cartCount > 0 && (
             <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
@@ -45,8 +45,9 @@ const Header = ({ cartCount }) => {
           )}
         </Link>
         
-        <Link to="/best-selling" className="hover:text-gray-400">Best Selling</Link>
-        <Link to="/seller-page" className="hover:text-gray-400">Seller Page</Link>
+        <Link to="/best-selling" className="hover:text-blue-500">Best Selling</Link>
+        <Link to="/coupons" className="hover:text-blue-500">Coupons</Link>
+        <Link to="/seller-page" className="hover:text-blue-500">Seller Page</Link>
         
       </div>
     </nav>

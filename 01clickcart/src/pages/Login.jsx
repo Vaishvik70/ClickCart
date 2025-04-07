@@ -40,6 +40,11 @@ const Login = () => {
           required
           className="w-full p-2 mb-3 rounded bg-gray-700"
         />
+        <p className="mt-2">
+          <a href="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </a>
+        </p>
         <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 p-2 rounded">
           Login
         </button>
