@@ -29,6 +29,8 @@ import SellerLogin from "./seller/SellerLogin";
 import AddProduct from "./seller/AddProduct";
 import SellerHelpPage from "./seller/SellerHelp";
 import SellerDashboard from "./seller/SellerDashboard";
+import SellerOrders from "./seller/SellerOrders";
+import SellerEarnings from "./seller/SellerEarnings";
 import "./index.css";
 
 const App = () => {
@@ -77,6 +79,8 @@ const App = () => {
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/seller-help" element={<SellerHelpPage />} />
           <Route path="/seller-dashboard" element={<SellerDashboard />} />
+          <Route path="/seller-orders" element={<SellerOrders />} />
+          <Route path="/seller-earnings" element={<SellerEarnings />} />
         </Routes>
         <Footer />
       </Router>
