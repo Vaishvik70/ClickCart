@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { account } from "../appwrite/appwriteConfig";
-import { FiLogOut, FiUser, FiPackage, FiBarChart2, FiDollarSign } from "react-icons/fi";
+import { FiLogOut, FiUser, FiBarChart2, FiDollarSign, FiHelpCircle } from "react-icons/fi";
 
 const SellerNavbar = ({ seller, setSeller }) => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const SellerNavbar = ({ seller, setSeller }) => {
           <FiDollarSign /> Fees & Commission
         </Link>
         <Link to="/seller-help" className="hover:text-yellow-400 flex items-center gap-2">
-          <FiDollarSign /> Seller Help
+          <FiHelpCircle /> Seller Help
         </Link>
       </div>
 
