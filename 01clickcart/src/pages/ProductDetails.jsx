@@ -10,7 +10,7 @@ const databases = new Databases(client);
 const account = new Account(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const REVIEW_COLLECTION_ID = "67d9690d003c8ffa0569";
-const SELLER_PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b"; // 🔁 Update this
+const SELLER_PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -19,10 +19,10 @@ export default function ProductDetail() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sellerLoading, setSellerLoading] = useState(true);
+  const [product, setProduct] = useState(null);
 
   const products = useSelector((state) => state.products?.products || []);
   const saleProducts = useSelector((state) => state.saleProducts?.saleProducts || []);
-
   const [sellerProducts, setSellerProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [reviewData, setReviewData] = useState({ name: "", rating: "", comment: "" });
@@ -36,6 +36,17 @@ export default function ProductDetail() {
     fetchSellerProducts();
   }, []);
 
+  useEffect(() => {
+    if (!loading && !sellerLoading) {
+      const foundProduct =
+        products.find((p) => p.id === id) ||
+        saleProducts.find((p) => p.id === id) ||
+        sellerProducts.find((p) => p.$id === id);
+
+      setProduct(foundProduct || false);
+    }
+  }, [id, loading, sellerLoading, products, saleProducts, sellerProducts]);
+
   const checkLoginStatus = async () => {
     try {
       const session = await account.get();
@@ -43,7 +54,7 @@ export default function ProductDetail() {
         setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", "true");
       }
-    } catch (error) {
+    } catch {
       setIsLoggedIn(false);
       localStorage.removeItem("isLoggedIn");
     } finally {
@@ -56,7 +67,8 @@ export default function ProductDetail() {
       const response = await databases.listDocuments(DATABASE_ID, REVIEW_COLLECTION_ID, [
         Query.equal("productId", id),
       ]);
-      setReviews(response.documents);
+      const sorted = response.documents.sort((a, b) => new Date(b.$createdAt) - new Date(a.$createdAt));
+      setReviews(sorted);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }
@@ -73,16 +85,8 @@ export default function ProductDetail() {
     setSellerLoading(false);
   };
 
-  let product =
-    products.find((p) => p.id === id) || saleProducts.find((p) => p.id === id);
-
-  // ✅ If not found, search in seller products by $id
-  if (!product) {
-    product = sellerProducts.find((p) => p.$id === id);
-  }
-
   const addReview = async () => {
-    if (!reviewData.name || !reviewData.rating || !reviewData.comment) {
+    if (!reviewData.name.trim() || !reviewData.rating || !reviewData.comment.trim()) {
       alert("Please fill all fields.");
       return;
     }
@@ -104,7 +108,7 @@ export default function ProductDetail() {
     }
   };
 
-  if (loading || sellerLoading) {
+  if (loading || sellerLoading || product === null) {
     return <p className="text-center text-gray-500">Loading...</p>;
   }
 
@@ -112,51 +116,19 @@ export default function ProductDetail() {
     return <h2 className="text-red-500 text-center">Product not found</h2>;
   }
 
+  const productId = product.id || product.$id;
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">{product.title}</h1>
       <img src={product.image} alt={product.title} className="w-64 h-64 object-cover rounded mt-4" />
       <p className="mt-2 text-gray-700">{product.category}</p>
       <p className="mt-2 text-lg font-semibold">
-        ₹{product.salePrice || product.price} 
+        ₹{product.salePrice || product.price}
         {product.onSale === "true" && (
           <span className="text-red-500 ml-2">-{product.discount}% OFF</span>
         )}
       </p>
-
-      {/* Color Selection */}
-      {product.availableColors && product.availableColors.length > 0 && (
-        <div className="mt-3">
-          <label className="font-semibold">Select Color:</label>
-          <select
-            value={selectedColor}
-            onChange={(e) => setSelectedColor(e.target.value)}
-            className="border p-2 rounded ml-2"
-          >
-            <option value="">Choose Color</option>
-            {product.availableColors.map((color, index) => (
-              <option key={index} value={color}>{color}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Size Selection */}
-      {product.category?.toLowerCase().includes("clothing") && product.availableSizes && (
-        <div className="mt-3">
-          <label className="font-semibold">Select Size:</label>
-          <select
-            value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value)}
-            className="border p-2 rounded ml-2"
-          >
-            <option value="">Choose Size</option>
-            {product.availableSizes.map((size, index) => (
-              <option key={index} value={size}>{size}</option>
-            ))}
-          </select>
-        </div>
-      )}
 
       {!isLoggedIn && (
         <p className="text-red-500 font-semibold mt-4">⚠️ You must be logged in to purchase!</p>
@@ -169,7 +141,9 @@ export default function ProductDetail() {
         <button
           onClick={() => {
             const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-            const alreadyInCart = existingCart.some((item) => item.id === product.id || item.$id === product.$id);
+            const alreadyInCart = existingCart.some(
+              (item) => (item.id || item.$id) === productId
+            );
             if (!alreadyInCart) {
               localStorage.setItem("cart", JSON.stringify([...existingCart, product]));
               alert("Added to cart!");
@@ -178,11 +152,12 @@ export default function ProductDetail() {
             }
           }}
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mr-2"
+          disabled={!selectedColor || (product.category?.includes("clothing") && !selectedSize)}
         >
           Add to Cart
         </button>
-        <button 
-          onClick={() => navigate("/payment", { state: { product, selectedColor, selectedSize } })} 
+        <button
+          onClick={() => navigate("/payment", { state: { product, selectedColor, selectedSize } })}
           className="bg-red-500 text-white py-2 px-4 rounded mt-2"
           disabled={!isLoggedIn}
         >
@@ -243,11 +218,11 @@ export default function ProductDetail() {
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">🔁 Related Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {products
-              .filter((item) => item.id !== product.id && item.category === product.category)
+            {[...products, ...sellerProducts]
+              .filter((item) => (item.id || item.$id) !== productId && item.category === product.category)
               .slice(0, 3)
               .map((related) => (
-                <div key={related.id} className="bg-white p-4 shadow rounded">
+                <div key={related.id || related.$id} className="bg-white p-4 shadow rounded">
                   <img
                     src={related.image}
                     alt={related.title}
@@ -261,7 +236,7 @@ export default function ProductDetail() {
                   </p>
                   <button
                     className="mt-2 bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
-                    onClick={() => navigate(`/product/${related.id}`)}
+                    onClick={() => navigate(`/product/${related.id || related.$id}`)}
                   >
                     View
                   </button>
