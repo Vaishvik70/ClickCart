@@ -8,7 +8,6 @@ const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const COLLECTION_ID = "67cad7ff0005fc97c570";
 const HISTORY_COLLECTION_ID = "67d17f5a0025aee3e9f6";
-
 // Static coupons
 const COUPONS = {
   SAVE10: 10,
@@ -69,7 +68,7 @@ export default function Payment() {
       const orderData = {
         name: formData?.name,
         paymentMethod: formData?.paymentMethod,
-        totalPrice: totalPriceAfterDiscount,
+        totalPrice: Math.round(totalPriceAfterDiscount),
         date: new Date().toISOString().slice(0, 12),
         products: JSON.stringify(
           cart?.map((item) => ({

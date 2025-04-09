@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { databases, storage, ID } from "../appwrite/appwriteConfig";
+import React, { useState, useEffect } from "react";
+import { databases, storage, account, ID } from "../appwrite/appwriteConfig";
 import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
@@ -8,10 +8,25 @@ const AddProduct = () => {
     description: "",
     price: "",
     category: "",
+    stock: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null); // 👈 Get seller ID dynamically
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const user = await account.get();
+        setUserId(user.$id);
+      } catch (error) {
+        console.error("Failed to fetch user", error);
+      }
+    };
+
+    getCurrentUser();
+  }, []);
 
   const handleChange = (e) => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
@@ -23,21 +38,28 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userId) {
+      alert("User not authenticated");
+      return;
+    }
+
     setLoading(true);
 
     try {
       let imageUrl = "";
 
+      // Upload image to Appwrite Storage
       if (imageFile) {
         const imageUpload = await storage.createFile(
-          "67cad81f00268d3093c5", //Bucket ID
+          "67cad81f00268d3093c5", // Bucket ID
           ID.unique(),
           imageFile
         );
 
-        imageUrl = storage.getFileView("67cad81f00268d3093c5", imageUpload.$id); // Bucket ID
+        imageUrl = storage.getFileView("67cad81f00268d3093c5", imageUpload.$id);
       }
 
+      // Save product to Appwrite database
       await databases.createDocument(
         "67cad7e600027ac7e8c0", // Database ID
         "67ea560f00044ac3e66b", // Product Collection ID
@@ -47,12 +69,14 @@ const AddProduct = () => {
           description: productData.description,
           price: Number(productData.price),
           category: productData.category,
+          stock: Number(productData.stock),
           image: imageUrl,
-          sellerId: "seller-123", // Replace with dynamic seller ID
+          sellerId: userId,
         }
       );
 
       alert("Product added successfully!");
+      navigate("/seller-dashboard/my-products"); // 👈 Redirect after adding product
     } catch (error) {
       console.error("Error adding product:", error);
       alert("Failed to add product. Check console for details.");
@@ -66,7 +90,7 @@ const AddProduct = () => {
       {/* ✅ Back to Dashboard Button */}
       <button
         onClick={() => navigate("/seller-dashboard")}
-        className="mb-4 bg-gray-700 text-white px-4 py-2 rounded"
+        className="mb-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-950"
       >
         ← Back to Dashboard
       </button>
@@ -93,6 +117,14 @@ const AddProduct = () => {
           type="number"
           name="price"
           placeholder="Price"
+          onChange={handleChange}
+          className="border p-2 w-full"
+          required
+        />
+        <input
+          type="number"
+          name="stock"
+          placeholder="Stock"
           onChange={handleChange}
           className="border p-2 w-full"
           required

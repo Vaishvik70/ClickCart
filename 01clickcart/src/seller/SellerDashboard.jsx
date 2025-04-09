@@ -55,7 +55,7 @@ const SellerDashboard = () => {
   return (
     <div className="min-h-screen bg-[#f5f5f5] flex flex-col md:flex-row">
       {/* Sidebar */}
-      <aside className="bg-gray-900 text-white w-full md:w-64 p-6">
+      <aside className="bg-gray-600 text-white w-full md:w-64 p-6">
         <h2 className="text-2xl font-bold mb-6">Seller Dashboard</h2>
         <ul className="space-y-4">
           <li className="hover:bg-gray-700 p-2 rounded-lg">
@@ -66,6 +66,11 @@ const SellerDashboard = () => {
           <li className="hover:bg-gray-700 p-2 rounded-lg">
             <a href="/add-product" className="flex items-center gap-2">
               <FiBox /> Add Product
+            </a>
+          </li>
+          <li className="hover:bg-gray-700 p-2 rounded-lg">
+            <a href="/my-products" className="flex items-center gap-2">
+              <FiBox /> My Products
             </a>
           </li>
           <li className="hover:bg-gray-700 p-2 rounded-lg">

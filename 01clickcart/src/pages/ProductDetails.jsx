@@ -27,9 +27,6 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState([]);
   const [reviewData, setReviewData] = useState({ name: "", rating: "", comment: "" });
 
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-
   useEffect(() => {
     checkLoginStatus();
     fetchReviews();
@@ -129,40 +126,54 @@ export default function ProductDetail() {
           <span className="text-red-500 ml-2">-{product.discount}% OFF</span>
         )}
       </p>
+      <p className="text-sm text-gray-600 mt-1 text-bold">
+        <span className="font-medium">Stock:</span> {product.stock ?? "N/A"}
+      </p>
 
       {!isLoggedIn && (
         <p className="text-red-500 font-semibold mt-4">⚠️ You must be logged in to purchase!</p>
       )}
 
       <div className="mt-4">
-        <button onClick={() => navigate("/products")} className="bg-blue-500 text-white py-2 px-4 rounded mr-2">
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
+        >
           Back to Products
         </button>
         <button
           onClick={() => {
-            const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-            const alreadyInCart = existingCart.some(
-              (item) => (item.id || item.$id) === productId
-            );
-            if (!alreadyInCart) {
-              localStorage.setItem("cart", JSON.stringify([...existingCart, product]));
-              alert("Added to cart!");
-            } else {
-              alert("Product is already in your cart.");
-            }
-          }}
-          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mr-2"
-          disabled={!selectedColor || (product.category?.includes("clothing") && !selectedSize)}
+          const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+          const alreadyInCart = existingCart.some(
+          (item) => (item.id || item.$id) === productId
+          );
+        if (!alreadyInCart) {
+          localStorage.setItem("cart", JSON.stringify([...existingCart, product]));
+          alert("Added to cart!");
+        } else {
+          alert("Product is already in your cart.");
+        }
+        }}
+          className={`${
+          product.stock > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
+        } text-white px-4 py-2 rounded-md mr-2`}
+        disabled={product.stock <= 0}
         >
           Add to Cart
         </button>
+
         <button
-          onClick={() => navigate("/payment", { state: { product, selectedColor, selectedSize } })}
-          className="bg-red-500 text-white py-2 px-4 rounded mt-2"
-          disabled={!isLoggedIn}
+          onClick={() => navigate("/payment", { state: { product } })}
+          className={`${
+            product.stock > 0 && isLoggedIn
+            ? "bg-red-500"
+            : "bg-gray-400 cursor-not-allowed"
+          } text-white py-2 px-4 rounded mt-2`}
+          disabled={!isLoggedIn || product.stock <= 0}
         >
           Buy Now
         </button>
+
       </div>
 
       {/* Customer Reviews */}
@@ -216,7 +227,7 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         <div className="mt-10">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">🔁 Related Products</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800"> ❤️ You May Also Like This ❤️ </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {[...products, ...sellerProducts]
               .filter((item) => (item.id || item.$id) !== productId && item.category === product.category)

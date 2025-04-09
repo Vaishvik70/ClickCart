@@ -56,7 +56,7 @@ const SellerEarnings = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Seller Earnings</h1>
         <button
-          onClick={() => navigate('/seller/dashboard')}
+          onClick={() => navigate('/seller-dashboard')}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
           Go to Dashboard

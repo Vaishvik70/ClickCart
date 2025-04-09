@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SellerHelpPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl">
@@ -32,6 +34,14 @@ const SellerHelpPage = () => {
             <h3 className="text-xl font-semibold">5. Need Further Assistance?</h3>
             <p>Contact our support team at <span className="font-semibold">support@clickcart.com</span> or visit our <Link to="/contact-us" className="text-blue-600">Contact Us</Link> page.</p>
           </div>
+
+          <button
+          onClick={() => navigate("/seller-page")}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition"
+          >
+            ← Back to Seller Page
+          </button>
+
         </div>
       </div>
     </div>

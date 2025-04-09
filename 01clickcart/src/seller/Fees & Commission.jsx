@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const FeesAndCommission = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-10 px-6 bg-gray-100 min-h-screen">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
@@ -8,7 +11,6 @@ const FeesAndCommission = () => {
         <p className="text-gray-700 mb-6">
           Understand our transparent pricing model and how commissions are applied.
         </p>
-
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-gray-800">Commission Structure</h3>
           <p className="text-gray-600">We charge a commission based on product category and sales volume.</p>
@@ -39,10 +41,18 @@ const FeesAndCommission = () => {
           </ul>
         </div>
 
-        <div>
+        <div className="mb-8">
           <h3 className="text-xl font-semibold text-gray-800">Additional Charges</h3>
           <p className="text-gray-600">No hidden charges! Only applicable for premium services.</p>
         </div>
+
+        <button
+          onClick={() => navigate("/seller-page")}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition"
+        >
+          ← Back to Seller Page
+        </button>
+        
       </div>
     </section>
   );

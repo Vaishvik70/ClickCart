@@ -11,6 +11,7 @@ const initialState = {
       onSale: "true",
       discount: "15",
       colors: ["black", "white", "gold"],
+      stock: 15,
     },
     { 
       id: "2",
@@ -20,6 +21,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/81fvJauBWDL._SL1500_.jpg",
       onSale: "false",
       discount: "0",
+      stock: 0,
     },
     { 
       id: "3",
@@ -29,6 +31,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61FMZ9rSZUL._SL1500_.jpg",
       onSale: "true",
       discount: "20",
+      stock: 0,
     },
     { 
       id: "4",
@@ -38,7 +41,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61nxQ62qglL._SL1500_.jpg",
       onSale: "true",
       discount: "5",
-      colors: ["black", "white", "gold"],
+      stock: 10,
     },
     { 
       id: "5",
@@ -48,6 +51,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/71TNY08QUYL._SL1500_.jpg",
       onSale: "false",
       discount: "0",
+      stock: 43,
     },
     { 
       id: "6",
@@ -57,6 +61,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61ZEkMXevXL._SL1080_.jpg",
       onSale: "true",
       discount: "15",
+      stock: 0,
     },
     { 
       id: "7",
@@ -66,6 +71,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/71RJCexaxiL._SL1500_.jpg",
       onSale: "false",
       discount: "0",
+      stock: 34,
     },
     { 
       id: "8",
@@ -75,6 +81,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61oCISLE+PL._SL1500_.jpg",
       onSale: "true",
       discount: "12",
+      stock: 56,
     },
     { 
       id: "9",
@@ -84,6 +91,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61+SW9nDTEL._SL1500_.jpg",
       onSale: "false",
       discount: "0",
+      stock: 23,
     },
     { 
       id: "10",
@@ -93,8 +101,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/41xlIZwU5KL._SX679_.jpg",
       onSale: "false",
       discount: "0",
-      colors: ["red", "blue", "black"], // Add colors here
-      sizes: ["S", "M", "L", "XL"], // Add sizes here
+      stock: 30,
     },
     { 
       id: "11",
@@ -104,6 +111,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/716PKZxT4jL._SY879_.jpg",
       onSale: "false",
       discount: "0",
+      stock: 50,
     },
     { 
       id: "12",
@@ -113,6 +121,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61r9oNywMeL._SY695_.jpg",
       onSale: "true",
       discount: "5",
+      stock: 46,
     },
     { 
       id: "13",
@@ -122,6 +131,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/81OS4czw-AL._SY879_.jpg",
       onSale: "true",
       discount: "10",
+      stock: 23,
     },
     { 
       id: "14",
@@ -131,6 +141,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/51g8vaftUfL._SY879_.jpg",
       onSale: "true",
       discount: "8",
+      stock: 25,
     },
     { 
       id: "15",
@@ -140,6 +151,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/81p79Hfs3NL._SY879_.jpg",
       onSale: "true",
       discount: "12",
+      stock: 40,
     },
     { 
       id: "16",
@@ -149,6 +161,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/61izjVVYJpL._SX695_.jpg",
       onSale: "true",
       discount: "18",
+      stock: 28,
     },
     { 
       id: "17",
@@ -158,6 +171,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/81uRUnI9Y3L.jpg",
       onSale: "true",
       discount: "18",
+      stock: 12,
     },
     { 
       id: "18",
@@ -167,6 +181,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/51SVi8gKijL._SR480,440_.jpg",
       onSale: "true",
       discount: "18",
+      stock: 30,
     },
     { 
       id: "19",
@@ -176,6 +191,7 @@ const initialState = {
       image: "https://rukminim2.flixcart.com/image/1200/1200/xif0q/book/a/z/o/solo-leveling-vol-1-manga-original-imahy5kn373ztysh.jpeg",
       onSale: "true",
       discount: "10",
+      stock: 0,
     },
     { 
       id: "20",
@@ -185,6 +201,7 @@ const initialState = {
       image: "https://m.media-amazon.com/images/I/71GLZcjDNKL._SL1280_.jpg",
       onSale: "true",
       discount: "18",
+      stock: 20,
     },
   ],
 };

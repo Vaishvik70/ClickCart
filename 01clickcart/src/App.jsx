@@ -32,6 +32,8 @@ import SellerHelpPage from "./seller/SellerHelp";
 import SellerDashboard from "./seller/SellerDashboard";
 import SellerOrders from "./seller/SellerOrders";
 import SellerEarnings from "./seller/SellerEarnings";
+import MyProducts from "./seller/MyProducts";
+import EditProduct from "./seller/EditProduct";
 import Coupons from "./pages/Coupons";
 import "./index.css";
 
@@ -84,6 +86,9 @@ const App = () => {
           <Route path="/seller-dashboard" element={<SellerDashboard />} />
           <Route path="/seller-orders" element={<SellerOrders />} />
           <Route path="/seller-earnings" element={<SellerEarnings />} />
+          <Route path="/my-products" element={<MyProducts />} />
+          <Route path="/edit-product" element={<EditProduct />} />
+          <Route path="/seller-dashboard/my-products" element={<MyProducts />} />
           <Route path="/coupons" element={<Coupons />} />
         </Routes>
         <Footer />
