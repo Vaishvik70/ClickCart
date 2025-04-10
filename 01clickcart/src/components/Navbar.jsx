@@ -52,8 +52,8 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <Link to="/login" className="text-blue-600 font-medium">Login</Link>
-            <Link to="/register" className="text-blue-600 font-medium">Register</Link>
+            <Link to="/user-login" className="text-blue-600 font-medium">Login</Link>
+            <Link to="/user-register" className="text-blue-600 font-medium">Register</Link>
           </>
         )}
       </div>

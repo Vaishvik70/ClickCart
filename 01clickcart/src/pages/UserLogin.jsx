@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import { login } from "../appwrite/appwrite"; // Import login function
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { userLogin } from "../appwrite/appwrite"; // 👈 import user login logic
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Hook for redirection
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const session = await login(email, password);
+    const session = await userLogin(email, password);
 
     if (session) {
-      alert("Login successful!");
-      navigate("/"); // Redirect to Home Page
+      alert("User login successful!");
+      navigate("/"); // You can redirect to a user-specific dashboard if needed
     } else {
-      alert("Login failed. Check your credentials and try again.");
+      alert("Login failed. Try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <h2 className="text-2xl font-bold mb-4">User Login</h2>
         <input
           type="email"
           placeholder="Email"
@@ -41,16 +41,16 @@ const Login = () => {
           className="w-full p-2 mb-3 rounded bg-gray-700"
         />
         <p className="mt-2">
-          <a href="/forgot-password" className="text-blue-500 hover:underline">
+          <a href="/forgot-password" className="text-blue-400 hover:underline">
             Forgot Password?
           </a>
         </p>
-        <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 p-2 rounded">
-          Login
+        <button type="submit" className="w-full bg-green-500 hover:bg-green-600 p-2 rounded">
+          Login as User
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default UserLogin;

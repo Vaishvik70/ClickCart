@@ -42,21 +42,21 @@ const Home = () => {
     >
       {/* Sale Products Section */}
       <div className="max-w-7xl mx-auto text-center py-10 overflow-hidden">
-        <h2 className="text-xl font-bold mb-4">🔥 Sale Products 🔥</h2>
-        <div className="w-full overflow-hidden">
-          <Slider {...sliderSettings}>
-            {saleProducts.length > 0 ? (
-              saleProducts.map((product) => (
-                <div key={product.id} className="px-2">
-                  <SaleProductCard product={product} />
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-400">No products on sale right now.</p>
-            )}
-          </Slider>
-        </div>
+      <h2 className="text-xl font-bold mb-4 text-blue-700">🔥 Sale Products 🔥</h2>
+      <div className="w-full overflow-hidden">
+        <Slider {...sliderSettings}>
+          {saleProducts.length > 0 ? (
+            saleProducts.map((product) => (
+              <div key={product.id} className="px-2">
+                <SaleProductCard product={product} />
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400">No products on sale right now.</p>
+          )}
+        </Slider>
       </div>
+    </div>
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto text-center py-10">

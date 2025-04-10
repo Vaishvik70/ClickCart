@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import ProtectedUserRoute from "./hooks/ProtectedUserRoute";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import UserLogin from "./pages/UserLogin";
+import UserRegister from "./pages/UserRegister";
 import ForgotPassword from "./pages/ForgotPassword";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
@@ -61,22 +62,37 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/" element={<Hero />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/user-login" element={<UserLogin />} />
+          <Route path="/user-register" element={<UserRegister />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/products" element={<Products />} />
+          <Route path="/products" element={<ProtectedUserRoute>
+                                            <Products />
+                                          </ProtectedUserRoute>} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/sale-product/:id" element={<SaleProductDetail />} />
           <Route path="/offer/:id" element={<OfferDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/receipt" element={<Receipt />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/cart" element={<ProtectedUserRoute>
+                                        <Cart />
+                                       </ProtectedUserRoute>} />
+          <Route path="/payment" element={<ProtectedUserRoute>
+                                            <Payment />
+                                          </ProtectedUserRoute>} />
+          <Route path="/receipt" element={<ProtectedUserRoute>
+                                            <Receipt />
+                                          </ProtectedUserRoute>} />
+          <Route path="/history" element={<ProtectedUserRoute>
+                                            <History />
+                                          </ProtectedUserRoute>} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
-          <Route path="/best-selling" element={<BestSelling />} />
+          <Route path="/best-selling" element={<ProtectedUserRoute>
+                                                <BestSelling />
+                                               </ProtectedUserRoute>} />
+          <Route path="/coupons" element={<ProtectedUserRoute>
+                                            <Coupons />
+                                          </ProtectedUserRoute>} />                                     
           <Route path="/seller-page" element={<SellerPage />} />
           <Route path="/fees-commission" element={<FeesAndCommission />} />
           <Route path="/seller-register" element={<SellerRegister />} />
@@ -89,7 +105,6 @@ const App = () => {
           <Route path="/my-products" element={<MyProducts />} />
           <Route path="/edit-product" element={<EditProduct />} />
           <Route path="/seller-dashboard/my-products" element={<MyProducts />} />
-          <Route path="/coupons" element={<Coupons />} />
         </Routes>
         <Footer />
       </Router>

@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Storage, ID, Query } from "appwrite";
+import { Client, Account, Databases, Storage, ID, Query, Permission, Role } from "appwrite";
 
 // 🔹 Initialize Appwrite Client
 const client = new Client();
@@ -12,46 +12,47 @@ export const databases = new Databases(client);
 export const storage = new Storage(client);
 export { ID, Query };
 
-// 🔹 Your Appwrite Configurations (Replace with actual IDs)
-const DATABASE_ID = "67cad7e600027ac7e8c0"; // Your Database ID
-const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04"; // Your Seller Collection ID
-const PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b"; // Your Product Collection ID
-const STORAGE_BUCKET_ID = "67cad81f00268d3093c5"; // Your Storage Bucket ID
+// 🔹 Appwrite Configurations (Replace with actual IDs)
+const DATABASE_ID = "67cad7e600027ac7e8c0";
+const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04";
+const USER_COLLECTION_ID = "67f75de1003cacd68d8c"; // 👈 Add your User Collection ID
+const PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b";
+const STORAGE_BUCKET_ID = "67cad81f00268d3093c5";
+
+
+// ----------------------------- SELLER FUNCTIONS -----------------------------
 
 /**
  * ✅ Register a new seller
  */
 export const register = async (name, email, password) => {
   try {
-    // Create a new user in Appwrite Authentication
     const newUser = await account.create(ID.unique(), email, password, name);
-    console.log("✅ User Registered:", newUser);
+    console.log("✅ Seller Registered:", newUser);
 
-    // Store Seller Info in the Database
     await databases.createDocument(
       DATABASE_ID,
       SELLER_COLLECTION_ID,
       ID.unique(),
       {
-        name: name, // Ensure "name" exists in Appwrite schema
-        email: email,
-        userId: newUser.$id, // Store the Appwrite user ID
+        name,
+        email,
+        userId: newUser.$id,
       }
     );
 
     return newUser;
   } catch (error) {
-    console.error("❌ Registration Error:", error);
+    console.error("❌ Seller Registration Error:", error);
     return null;
   }
 };
 
 /**
- * ✅ Login a seller
+ * ✅ Login seller
  */
 export const login = async (email, password) => {
   try {
-    // Ensure no existing session before logging in
     try {
       await account.deleteSession("current");
       console.log("✅ Removed existing session");
@@ -60,16 +61,74 @@ export const login = async (email, password) => {
     }
 
     const session = await account.createEmailPasswordSession(email, password);
-    console.log("✅ Login Successful:", session);
+    console.log("✅ Seller Login Successful:", session);
     return session;
   } catch (error) {
-    console.error("❌ Login Error:", error);
+    console.error("❌ Seller Login Error:", error);
+    return null;
+  }
+};
+
+
+// ----------------------------- USER FUNCTIONS -----------------------------
+
+/**
+ * ✅ Register a new user (buyer)
+ */
+export const userRegister = async (name, email, password) => {
+  try {
+    const newUser = await account.create(ID.unique(), email, password, name);
+    await account.createEmailPasswordSession(email, password); // ✅ Required for permissions to work
+
+    await databases.createDocument(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      ID.unique(),
+      {
+        name: name,
+        email: email,
+        userId: newUser.$id,
+      },
+      [
+        Permission.read(Role.user(newUser.$id)),
+        Permission.update(Role.user(newUser.$id)),
+        Permission.delete(Role.user(newUser.$id)),
+      ]
+    );
+
+    return newUser;
+  } catch (error) {
+    console.error("❌ User Registration Error:", error);
     return null;
   }
 };
 
 /**
- * ✅ Logout user
+ * ✅ Login user (buyer)
+ */
+export const userLogin = async (email, password) => {
+  try {
+    try {
+      await account.deleteSession("current");
+      console.log("✅ Removed existing session");
+    } catch (err) {
+      console.warn("⚠️ No active session to remove");
+    }
+
+    const session = await account.createEmailPasswordSession(email, password);
+    console.log("✅ User Login Successful:", session);
+    return session;
+  } catch (error) {
+    console.error("❌ User Login Error:", error);
+    return null;
+  }
+};
+
+
+// ----------------------------- COMMON FUNCTIONS -----------------------------
+
+/**
+ * ✅ Logout any user (seller or buyer)
  */
 export const logout = async () => {
   try {
@@ -79,6 +138,22 @@ export const logout = async () => {
     console.error("❌ Logout Error:", error.message);
   }
 };
+
+/**
+ * ✅ Get current logged-in user
+ */
+export const getCurrentUser = async () => {
+  try {
+    const user = await account.get();
+    return user;
+  } catch (error) {
+    console.warn("⚠️ No user logged in");
+    return null;
+  }
+};
+
+
+// ----------------------------- PRODUCT FUNCTIONS -----------------------------
 
 /**
  * ✅ Fetch products from Appwrite Database
@@ -99,15 +174,16 @@ export const getProducts = async () => {
  */
 export const addProduct = async (product) => {
   try {
+    const user = await getCurrentUser(); // get logged-in seller
     let imageId = "";
+    let imageUrl = "";
 
-    // Upload Image if Provided
     if (product.image) {
       const file = await storage.createFile(STORAGE_BUCKET_ID, ID.unique(), product.image);
       imageId = file.$id;
+      imageUrl = storage.getFilePreview(STORAGE_BUCKET_ID, imageId).href;
     }
 
-    // Store Product in Database
     const newProduct = await databases.createDocument(
       DATABASE_ID,
       PRODUCT_COLLECTION_ID,
@@ -115,9 +191,10 @@ export const addProduct = async (product) => {
       {
         name: product.name,
         price: parseFloat(product.price),
-        category: product.category, // Ensure this field exists in Appwrite DB
+        category: product.category,
         description: product.description,
-        image: imageId,
+        image: imageUrl,
+        sellerId: user?.$id || null,
       }
     );
 
