@@ -12,7 +12,7 @@ const AddProduct = () => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null); // 👈 Get seller ID dynamically
+  const [userId, setUserId] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,7 +48,6 @@ const AddProduct = () => {
     try {
       let imageUrl = "";
 
-      // Upload image to Appwrite Storage
       if (imageFile) {
         const imageUpload = await storage.createFile(
           "67cad81f00268d3093c5", // Bucket ID
@@ -59,7 +58,6 @@ const AddProduct = () => {
         imageUrl = storage.getFileView("67cad81f00268d3093c5", imageUpload.$id);
       }
 
-      // Save product to Appwrite database
       await databases.createDocument(
         "67cad7e600027ac7e8c0", // Database ID
         "67ea560f00044ac3e66b", // Product Collection ID
@@ -76,7 +74,7 @@ const AddProduct = () => {
       );
 
       alert("Product added successfully!");
-      navigate("/seller-dashboard/my-products"); // 👈 Redirect after adding product
+      navigate("/seller-dashboard/my-products"); 
     } catch (error) {
       console.error("Error adding product:", error);
       alert("Failed to add product. Check console for details.");
@@ -87,7 +85,7 @@ const AddProduct = () => {
 
   return (
     <div className="p-6">
-      {/* ✅ Back to Dashboard Button */}
+
       <button
         onClick={() => navigate("/seller-dashboard")}
         className="mb-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-950"

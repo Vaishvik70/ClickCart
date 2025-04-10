@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { databases, storage, ID } from "../appwrite/appwriteConfig";
 
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const COLLECTION_ID = "67ea560f00044ac3e66b";
-const BUCKET_ID = "67cad81f00268d3093c5";
+const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
+const COLLECTION_ID = "67ea560f00044ac3e66b"; // Products Collection ID
+const BUCKET_ID = "67cad81f00268d3093c5"; // Bucket ID
 
 const EditProduct = () => {
   const { state } = useLocation();

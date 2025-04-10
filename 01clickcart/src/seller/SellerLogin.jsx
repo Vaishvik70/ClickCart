@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { account } from "../appwrite/appwriteConfig"; // ✅ Import Appwrite account
+import { account } from "../appwrite/appwriteConfig"; 
 
 const SellerLogin = () => {
   const [sellerLogin, setSellerLogin] = useState({
@@ -18,20 +18,20 @@ const SellerLogin = () => {
     e.preventDefault();
 
     try {
-      // ✅ Delete any existing session to prevent session conflict
+      //  Delete any existing session to prevent session conflict
       await account.deleteSession('current');
     } catch (error) {
       console.log("No existing session to delete.");
     }
 
     try {
-      // ✅ Log in the seller
+      // Log in 
       await account.createEmailPasswordSession(
         sellerLogin.email,
         sellerLogin.password
       );
       alert("Login successful!");
-      navigate("/seller-dashboard"); // Redirect to Seller Dashboard
+      navigate("/seller-dashboard"); 
     } catch (error) {
       console.error("Login failed:", error.message);
       alert("Login failed. Check your credentials and try again.");

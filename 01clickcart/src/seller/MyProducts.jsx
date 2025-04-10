@@ -4,8 +4,8 @@ import { Query } from 'appwrite';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 
-const DATABASE_ID = '67cad7e600027ac7e8c0';
-const COLLECTION_ID = '67ea560f00044ac3e66b';
+const DATABASE_ID = '67cad7e600027ac7e8c0'; // Database ID
+const COLLECTION_ID = '67ea560f00044ac3e66b'; // Products Collection ID
 
 const MyProducts = () => {
   const [products, setProducts] = useState([]);

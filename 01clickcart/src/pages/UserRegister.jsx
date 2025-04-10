@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { userRegister } from "../appwrite/appwrite"; // 👈 Import userRegister function
+import { userRegister } from "../appwrite/appwrite";
 import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
@@ -15,7 +15,7 @@ const UserRegister = () => {
 
     if (user) {
       alert("User registration successful! Please log in.");
-      navigate("/user-login"); // 👈 redirect to user login
+      navigate("/user-login"); 
     } else {
       alert("User registration failed. Try again.");
     }

@@ -6,11 +6,14 @@ import "slick-carousel/slick/slick-theme.css";
 import SaleProductCard from "../components/SaleProductCard";
 import Hero from "../components/Hero";
 
+
+
+// Slider settings
 const sliderSettings = {
   dots: false,
   infinite: true,
   speed: 500,
-  slidesToShow: 3,
+  slidesToShow: 4,
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 3000,
@@ -36,27 +39,24 @@ const Home = () => {
   return (
     <div
       className="bg-white text-blue-500 min-h-screen flex flex-col bg-no-repeat bg-center bg-contain overflow-x-hidden"
-      style={{
-        backgroundImage: "url('https://files.oaiusercontent.com/file-USgtpoWpy3ScPH776sJb2D?se=2025-03-13T09%3A14%3A09Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D7b20bd50-53ab-4f5e-bbdc-af1671a7e3b4.webp&sig=GSYu9dz1xkUZUeUaZTEhG3NLudhNHjfSo8Ibffyr848%3D')",
-      }}
     >
       {/* Sale Products Section */}
-      <div className="max-w-7xl mx-auto text-center py-10 overflow-hidden">
-      <h2 className="text-xl font-bold mb-4 text-blue-700">🔥 Sale Products 🔥</h2>
-      <div className="w-full overflow-hidden">
-        <Slider {...sliderSettings}>
-          {saleProducts.length > 0 ? (
-            saleProducts.map((product) => (
-              <div key={product.id} className="px-2">
-                <SaleProductCard product={product} />
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-400">No products on sale right now.</p>
-          )}
-        </Slider>
+      <div className="max-w-7xl mx-auto text-center py-10 overflow-hidden relative">
+        <h2 className="text-xl font-bold mb-4 text-blue-700">🔥 Sale Products 🔥</h2>
+        <div className="w-full relative">
+          <Slider {...sliderSettings}>
+            {saleProducts.length > 0 ? (
+              saleProducts.map((product) => (
+                <div key={product.id} className="px-2">
+                  <SaleProductCard product={product} />
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400">No products on sale right now.</p>
+            )}
+          </Slider>
+        </div>
       </div>
-    </div>
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto text-center py-10">

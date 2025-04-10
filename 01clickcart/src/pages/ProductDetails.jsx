@@ -4,13 +4,14 @@ import { useSelector } from "react-redux";
 import { Client, Databases, ID, Query, Account } from "appwrite";
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
+client.setEndpoint("https://cloud.appwrite.io/v1")
+      .setProject("67cad786002fe394c8a8");
 
 const databases = new Databases(client);
 const account = new Account(client);
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const REVIEW_COLLECTION_ID = "67d9690d003c8ffa0569";
-const SELLER_PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b";
+const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
+const REVIEW_COLLECTION_ID = "67d9690d003c8ffa0569"; // Review Collection ID
+const SELLER_PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b"; // Seller Product Collection ID
 
 export default function ProductDetail() {
   const { id } = useParams();

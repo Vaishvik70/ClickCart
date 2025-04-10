@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FaCopy, FaCheckCircle } from "react-icons/fa";
 
-const couponsList = [
+const coupons = [
   {
     id: 1,
-    code: "CLICK10",
+    code: "WELCOME10",
     discount: "10% Off",
-    description: "Get 10% off on all products.",
+    description: "Get 10% off on your first order.",
     expires: "2025-12-31",
   },
   {
@@ -18,10 +18,45 @@ const couponsList = [
   },
   {
     id: 3,
-    code: "SELLER50",
-    discount: "50% Off (Seller Special)",
-    description: "Special offer for sellers - 50% discount on fees.",
+    code: "BUY2GET1",
+    discount: "Buy 2 Get 1 Free",
+    description: "Add 3 items to your cart and get the cheapest one free.",
     expires: "2025-08-15",
+  },
+  {
+    id: 4,
+    code: "PAY20",
+    discount: "₹20 Off",
+    description: "Flat ₹20 off on Paypal payments.",
+    expires: "2025-10-01",
+  },
+  {
+    id: 5,
+    code: "SUMMER25",
+    discount: "25% Off",
+    description: "Enjoy 25% off during the Summer Sale.",
+    expires: "2025-05-31",
+  },
+  {
+    id: 6,
+    code: "CLICKFEST50",
+    discount: "₹50 Off",
+    description: "Flat ₹50 off on orders above ₹1000.",
+    expires: "2025-09-10",
+  },
+  {
+    id: 7,
+    code: "NEWUSER100",
+    discount: "₹100 Off",
+    description: "₹100 off on your first purchase as a new user.",
+    expires: "2025-12-31",
+  },
+  {
+    id: 8,
+    code: "EXTRA5",
+    discount: "Extra 5% Off",
+    description: "Extra 5% discount on prepaid orders.",
+    expires: "2025-07-20",
   },
 ];
 

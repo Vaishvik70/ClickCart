@@ -7,8 +7,8 @@ client.setEndpoint("https://cloud.appwrite.io/v1")
       .setProject("67cad786002fe394c8a8");
 
 const databases = new Databases(client);
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const COLLECTION_ID = "67cad7ff0005fc97c570";
+const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
+const COLLECTION_ID = "67cad7ff0005fc97c570"; // Cart Collection ID
 
 export default function Cart() { 
   const [cart, setCart] = useState([]);

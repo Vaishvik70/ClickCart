@@ -10,7 +10,7 @@ const About = () => {
       </p>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
-        {/* Mission Section */}
+
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-blue-400">🚀 Our Mission</h2>
           <p className="text-gray-300 mt-2">
@@ -18,7 +18,6 @@ const About = () => {
           </p>
         </div>
 
-        {/* Vision Section */}
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-blue-400">🌍 Our Vision</h2>
           <p className="text-gray-300 mt-2">

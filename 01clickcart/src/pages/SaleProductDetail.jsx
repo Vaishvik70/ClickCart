@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 import { Client, Account } from "appwrite";
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
+client.setEndpoint("https://cloud.appwrite.io/v1")
+      .setProject("67cad786002fe394c8a8");
 const account = new Account(client);
 
 export default function SaleProductDetail() {

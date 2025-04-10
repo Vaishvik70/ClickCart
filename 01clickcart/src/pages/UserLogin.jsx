@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { userLogin } from "../appwrite/appwrite"; // 👈 import user login logic
+import { userLogin } from "../appwrite/appwrite"; 
 import { useNavigate } from "react-router-dom";
 
 const UserLogin = () => {
@@ -14,7 +14,7 @@ const UserLogin = () => {
 
     if (session) {
       alert("User login successful!");
-      navigate("/"); // You can redirect to a user-specific dashboard if needed
+      navigate("/"); 
     } else {
       alert("Login failed. Try again.");
     }

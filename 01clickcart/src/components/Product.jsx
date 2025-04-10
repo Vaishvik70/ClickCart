@@ -5,7 +5,7 @@ const Product = ({ product, addToCart, buyNow, isLoggedIn }) => {
   const navigate = useNavigate();
 
   const handleLoginRedirect = () => {
-    navigate("/login"); // Redirect to login page
+    navigate("/login"); 
   };
 
   return (

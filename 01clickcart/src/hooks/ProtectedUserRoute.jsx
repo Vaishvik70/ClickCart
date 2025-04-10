@@ -11,29 +11,36 @@ const ProtectedUserRoute = ({ children }) => {
       try {
         const user = await account.get();
 
-        const sellerDoc = await databases.listDocuments(
-          "67cad7e600027ac7e8c0", // DB ID
+        // Check if this user is a seller
+        const sellerDocs = await databases.listDocuments(
+          "67cad7e600027ac7e8c0", // Database ID
           "67ea22e3000a9c49cd04", // Seller Collection ID
           [Query.equal("userId", user.$id)]
         );
 
-        if (sellerDoc.total > 0) {
-          // ✅ This user is a seller → block access
+        if (sellerDocs.total > 0) {
+          // Seller → redirect to seller dashboard
           setIsAllowed(false);
         } else {
-          // ✅ Not a seller → allow
+          // Regular user → allow
           setIsAllowed(true);
         }
       } catch (error) {
-        // Not logged in → block
-        setIsAllowed(false);
+        // Not logged in → allow public access
+        setIsAllowed(true);
       }
     };
 
     checkAccess();
   }, []);
 
-  if (isAllowed === null) return <div className="text-center mt-10">Checking access...</div>;
+  if (isAllowed === null) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold animate-pulse">Checking access...</p>
+      </div>
+    );
+  }
 
   if (!isAllowed) {
     return <Navigate to="/seller-dashboard" replace />;

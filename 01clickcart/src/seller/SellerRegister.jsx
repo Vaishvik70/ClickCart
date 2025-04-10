@@ -8,7 +8,7 @@ const SellerRegister = () => {
     email: "",
     phone: "",
     address: "",
-    password: "", // Only for authentication, not stored in DB
+    password: "", // Only for authentication, not stored in database
     storeName: "",
   });
 
@@ -22,7 +22,7 @@ const SellerRegister = () => {
     e.preventDefault();
 
     try {
-      // ✅ 1. Create a new seller account in Appwrite Authentication
+      //  Create a new seller account in Appwrite Authentication
       const user = await account.create(
         crypto.randomUUID(), // Generates a unique user ID
         sellerData.email,
@@ -30,13 +30,13 @@ const SellerRegister = () => {
         sellerData.name
       );
 
-      // ✅ 2. Store seller details in Appwrite Database (without password)
+      //  Store seller details in Appwrite Database 
       await databases.createDocument(
-        "67cad7e600027ac7e8c0", // Replace with your Database ID
-        "67ea22e3000a9c49cd04", // Replace with your Collection ID
+        "67cad7e600027ac7e8c0", //  Database ID
+        "67ea22e3000a9c49cd04", // Seller Collection ID
         crypto.randomUUID(), // Unique document ID
         {
-          userId: user.$id, // ✅ Store Appwrite user ID
+          userId: user.$id, // Store Appwrite user ID
           name: sellerData.name,
           email: sellerData.email,
           phone: sellerData.phone,

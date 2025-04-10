@@ -4,8 +4,8 @@ import { FiBox, FiShoppingCart, FiDollarSign, FiTrendingUp } from "react-icons/f
 import { useNavigate } from "react-router-dom";
 import { Query } from "appwrite";
 
-const DATABASE_ID = "67cad7e600027ac7e8c0"; // Replace with your database ID
-const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04"; // Replace with your seller collection ID
+const DATABASE_ID = "67cad7e600027ac7e8c0"; 
+const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04"; 
 const PRODUCTS_COLLECTION_ID = "67ea560f00044ac3e66b";
 const ORDERS_COLLECTION_ID = "67ea56160033576d12e8";
 
@@ -21,7 +21,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchSellerData = async () => {
       try {
-        // Get the current session (checks if the seller is logged in)
+        // checks if the seller is logged in
         const userData = await account.get();
         setSeller(userData);
 
@@ -29,7 +29,7 @@ const SellerDashboard = () => {
         const sellerData = await databases.listDocuments(
           DATABASE_ID,
           SELLER_COLLECTION_ID,
-          [Query.equal("userId", userData.$id)] // Assuming you have a "userId" field in your seller collection
+          [Query.equal("userId", userData.$id)] 
         );
 
         if (sellerData.total === 0) {
@@ -54,7 +54,7 @@ const SellerDashboard = () => {
         );
         setTotalOrders(orders.total);
 
-        // Calculate earnings for the last 7 days
+        // Calculate earnings 
         const earnings = orders.documents.reduce((total, order) => {
           const orderDate = new Date(order.$createdAt);
           const weekAgo = new Date();
@@ -66,7 +66,7 @@ const SellerDashboard = () => {
       } catch (error) {
         console.error("Error fetching seller data:", error);
         setSeller(null);
-        setIsSellerRegistered(false); // Set to false if the seller is not registered or if there's an error
+        setIsSellerRegistered(false);
       } finally {
         setLoading(false);
       }
@@ -76,7 +76,7 @@ const SellerDashboard = () => {
   }, [navigate]);
 
   const handleGoBackToSellerPage = () => {
-    navigate("/seller-login"); // Redirect to seller login or registration page
+    navigate("/seller-page");
   };
 
   if (loading) {

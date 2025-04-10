@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <nav className="p-4 flex flex-wrap justify-between items-center shadow-md bg-white text-black">
-      {/* Left section - Brand + Links */}
+      
       <div className="flex items-center space-x-6">
         <Link to="/" className="text-xl font-bold">
           Home
@@ -37,8 +37,7 @@ const Navbar = () => {
         <Link to="/history" className="hover:underline text-blue-500">History</Link>
         <Link to="/help" className="hover:underline text-blue-500">Help</Link>
       </div>
-
-      {/* Right section - Auth */}
+  
       <div className="flex items-center space-x-4 mt-2 sm:mt-0">
         {user ? (
           <>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import ProtectedUserRoute from "./hooks/ProtectedUserRoute";
@@ -39,25 +39,10 @@ import Coupons from "./pages/Coupons";
 import "./index.css";
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
-
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("bg-black", "text-white");
-      document.body.classList.remove("bg-white", "text-black");
-    } else {
-      document.body.classList.add("bg-white", "text-black");
-      document.body.classList.remove("bg-black", "text-white");
-    }
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
   return (
     <Provider store={store}>
       <Router>
-        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Navbar />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -66,33 +51,68 @@ const App = () => {
           <Route path="/user-register" element={<UserRegister />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/products" element={<ProtectedUserRoute>
-                                            <Products />
-                                          </ProtectedUserRoute>} />
+          <Route
+            path="/products"
+            element={
+              <ProtectedUserRoute>
+                <Products />
+              </ProtectedUserRoute>
+            }
+          />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/sale-product/:id" element={<SaleProductDetail />} />
           <Route path="/offer/:id" element={<OfferDetail />} />
-          <Route path="/cart" element={<ProtectedUserRoute>
-                                        <Cart />
-                                       </ProtectedUserRoute>} />
-          <Route path="/payment" element={<ProtectedUserRoute>
-                                            <Payment />
-                                          </ProtectedUserRoute>} />
-          <Route path="/receipt" element={<ProtectedUserRoute>
-                                            <Receipt />
-                                          </ProtectedUserRoute>} />
-          <Route path="/history" element={<ProtectedUserRoute>
-                                            <History />
-                                          </ProtectedUserRoute>} />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedUserRoute>
+                <Cart />
+              </ProtectedUserRoute>
+            }
+          />
+          <Route
+            path="/payment"
+            element={
+              <ProtectedUserRoute>
+                <Payment />
+              </ProtectedUserRoute>
+            }
+          />
+          <Route
+            path="/receipt"
+            element={
+              <ProtectedUserRoute>
+                <Receipt />
+              </ProtectedUserRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedUserRoute>
+                <History />
+              </ProtectedUserRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
-          <Route path="/best-selling" element={<ProtectedUserRoute>
-                                                <BestSelling />
-                                               </ProtectedUserRoute>} />
-          <Route path="/coupons" element={<ProtectedUserRoute>
-                                            <Coupons />
-                                          </ProtectedUserRoute>} />                                     
+          <Route
+            path="/best-selling"
+            element={
+              <ProtectedUserRoute>
+                <BestSelling />
+              </ProtectedUserRoute>
+            }
+          />
+          <Route
+            path="/coupons"
+            element={
+              <ProtectedUserRoute>
+                <Coupons />
+              </ProtectedUserRoute>
+            }
+          />
           <Route path="/seller-page" element={<SellerPage />} />
           <Route path="/fees-commission" element={<FeesAndCommission />} />
           <Route path="/seller-register" element={<SellerRegister />} />
@@ -104,7 +124,10 @@ const App = () => {
           <Route path="/seller-earnings" element={<SellerEarnings />} />
           <Route path="/my-products" element={<MyProducts />} />
           <Route path="/edit-product" element={<EditProduct />} />
-          <Route path="/seller-dashboard/my-products" element={<MyProducts />} />
+          <Route
+            path="/seller-dashboard/my-products"
+            element={<MyProducts />}
+          />
         </Routes>
         <Footer />
       </Router>

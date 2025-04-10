@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-// Dummy data: Sale products linked to offers
 const offersWithProducts = {
   1: [
     {
@@ -69,7 +68,6 @@ const offersWithProducts = {
   ],
 };
 
-// Helper function to calculate discount price
 const getDiscountedPrice = (price, discount) => {
   return (price - (price * discount) / 100).toFixed(2);
 };
@@ -78,7 +76,7 @@ const OfferDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem("user"); // Login check
+  const isLoggedIn = !!localStorage.getItem("user"); // Check if user is logged in
 
   const products = offersWithProducts[parseInt(id)] || [];
 
@@ -125,7 +123,6 @@ const OfferDetail = () => {
             <p className="text-gray-500 line-through">₹{product.price}</p>
             <p className="text-green-600 font-bold">{product.discount}% OFF</p>
 
-            {/* Buttons or Login Message */}
             <div className="mt-4 flex flex-col gap-2">
               {isLoggedIn ? (
                 <>
@@ -150,7 +147,6 @@ const OfferDetail = () => {
         ))}
       </div>
 
-      {/* Back to Home Button */}
       <div className="mt-8 text-center">
         <button 
           onClick={() => navigate("/")} 

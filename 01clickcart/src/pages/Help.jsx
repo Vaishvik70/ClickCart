@@ -6,7 +6,6 @@ const Help = () => {
       <h1 className="text-3xl font-bold text-gray-900 mb-4">Help & Support</h1>
       <p className="text-lg text-gray-700 mb-6">Find answers to common questions and troubleshooting tips.</p>
 
-      {/* FAQ Section */}
       <div className="max-w-3xl w-full bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Frequently Asked Questions</h2>
 
@@ -31,7 +30,7 @@ const Help = () => {
         </div>
       </div>
 
-      {/* Contact Support */}
+      {/* Contact Section */}
       <div className="mt-6 max-w-3xl w-full bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Still need help?</h2>
         <p className="text-gray-700">If your issue is not listed, contact our support team.</p>

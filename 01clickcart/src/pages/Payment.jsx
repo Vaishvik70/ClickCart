@@ -2,17 +2,24 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Client, Databases, ID } from "appwrite";
 
+
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
 const databases = new Databases(client);
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const COLLECTION_ID = "67cad7ff0005fc97c570";
-const HISTORY_COLLECTION_ID = "67d17f5a0025aee3e9f6";
-// Static coupons
+const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
+const COLLECTION_ID = "67cad7ff0005fc97c570"; // Cart collection ID
+const HISTORY_COLLECTION_ID = "67d17f5a0025aee3e9f6"; // History collection ID
+
+// Coupons with types and descriptions
 const COUPONS = {
-  SAVE10: 10,
-  SAVE20: 20,
-  FREESHIP: 5,
+  WELCOME10: { type: "percentage", value: 10, description: "10% off on first order" },
+  FREESHIP: { type: "flat", value: 5, description: "Free shipping (₹5 off)" },
+  BUY2GET1: { type: "special", value: 0, description: "Buy 2 Get 1 Free (not implemented yet)" },
+  PAY20: { type: "flat", value: 20, description: "₹20 off with Paypal" },
+  SUMMER25: { type: "percentage", value: 25, description: "25% Summer Sale" },
+  CLICKFEST50: { type: "flat", value: 50, description: "Flat ₹50 off above ₹1000" },
+  NEWUSER100: { type: "flat", value: 100, description: "₹100 off for new users" },
+  EXTRA5: { type: "percentage", value: 5, description: "Extra 5% off for prepaid" },
 };
 
 export default function Payment() {
@@ -32,8 +39,8 @@ export default function Payment() {
   });
 
   const [couponCode, setCouponCode] = useState("");
-  const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,18 +48,28 @@ export default function Payment() {
 
   const applyCoupon = () => {
     const code = couponCode.toUpperCase();
-    if (COUPONS[code]) {
-      setCouponDiscount(COUPONS[code]);
-      setCouponMessage(`✅ Coupon applied: ${COUPONS[code]}% off`);
-    } else {
-      setCouponDiscount(0);
+    const coupon = COUPONS[code];
+
+    if (!coupon) {
+      setAppliedCoupon(null);
       setCouponMessage("❌ Invalid coupon code");
+    } else {
+      setAppliedCoupon(coupon);
+      setCouponMessage(`✅ Coupon applied: ${coupon.description}`);
     }
   };
 
   const calculateFinalPrice = (item) => {
     const base = item.price - (item.price * (item.discount || 0)) / 100;
-    return base - (base * couponDiscount) / 100;
+    if (!appliedCoupon) return base;
+
+    if (appliedCoupon.type === "percentage") {
+      return base - (base * appliedCoupon.value) / 100;
+    } else if (appliedCoupon.type === "flat") {
+      return Math.max(0, base - appliedCoupon.value);
+    }
+
+    return base;
   };
 
   const totalPriceBeforeDiscount = product
@@ -79,9 +96,9 @@ export default function Payment() {
         ),
       };
       await databases.createDocument(DATABASE_ID, HISTORY_COLLECTION_ID, ID.unique(), orderData);
-      console.log("Order saved successfully in history");
+      console.log("Order saved to history");
     } catch (error) {
-      console.error("Error saving order to history:", error);
+      console.error("Error saving order:", error);
     }
   };
 
@@ -92,7 +109,7 @@ export default function Payment() {
         databases.deleteDocument(DATABASE_ID, COLLECTION_ID, doc.$id)
       );
       await Promise.all(deletePromises);
-      console.log("Cart cleared successfully");
+      console.log("Cart cleared");
     } catch (error) {
       console.error("Error clearing cart:", error);
     }
@@ -100,15 +117,11 @@ export default function Payment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Payment Details:", formData);
-    console.log("Products Purchased:", product || cart);
     alert("Payment Successful!");
 
     await saveOrderToHistory();
 
-    if (cart) {
-      await clearCart();
-    }
+    if (cart) await clearCart();
 
     navigate("/receipt", {
       state: { formData, product, cart, totalPriceAfterDiscount },
@@ -154,7 +167,7 @@ export default function Payment() {
       )}
 
       <h2 className="text-xl font-bold mt-4">Apply Coupon</h2>
-      <div className="flex space-x-2 mb-4">
+      <div className="flex space-x-2 mb-2">
         <input
           type="text"
           placeholder="Enter coupon code"
@@ -174,14 +187,14 @@ export default function Payment() {
 
       <h2 className="text-xl font-bold mt-4">Final Bill</h2>
       <p className="text-gray-400">Total Before Discount: ₹{totalPriceBeforeDiscount}</p>
-      {couponDiscount > 0 && (
-        <p className="text-blue-500">Coupon Discount: {couponDiscount}%</p>
+      {appliedCoupon && (
+        <p className="text-blue-500">Coupon Discount: {appliedCoupon.value}{appliedCoupon.type === "percentage" ? "%" : "₹"}</p>
       )}
       <p className="text-green-500 font-bold">
-        Total After Discount: ₹{totalPriceAfterDiscount}
+        Total After Discount: ₹{Math.round(totalPriceAfterDiscount)}
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 mt-4">
         <input
           type="text"
           name="name"

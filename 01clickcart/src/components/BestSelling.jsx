@@ -38,7 +38,7 @@ const bestSellers = [
 
 const BestSellingProducts = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("user"); // Adjust based on your auth system
+  const isLoggedIn = !!localStorage.getItem("user"); 
 
   const handleViewDetails = (productId) => {
     navigate(`/product/${productId}`);

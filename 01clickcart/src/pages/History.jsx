@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Client, Databases } from "appwrite";
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
+client.setEndpoint("https://cloud.appwrite.io/v1")
+      .setProject("67cad786002fe394c8a8");
 const databases = new Databases(client);
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const COLLECTION_ID = "67d17f5a0025aee3e9f6";
+const DATABASE_ID = "67cad7e600027ac7e8c0";// Database ID
+const COLLECTION_ID = "67d17f5a0025aee3e9f6"; // History Collection ID
 
 export default function History() {
   const [orders, setOrders] = useState([]);
@@ -75,7 +76,6 @@ export default function History() {
             <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
             <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
 
-            {/* Display Multiple Products */}
             <h3 className="text-md font-semibold mt-3">Products:</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               {order.products.length > 0 ? (
@@ -96,7 +96,6 @@ export default function History() {
               )}
             </div>
 
-            {/* Delete Order Button */}
             <button 
               onClick={() => deleteOrder(order.$id)}
               className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

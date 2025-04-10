@@ -8,11 +8,9 @@ const Products = () => {
   const [sellerProducts, setSellerProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Extract categories from both Redux and seller products
   const allProducts = [...reduxProducts, ...sellerProducts];
   const categories = ["All", ...new Set(allProducts.map((product) => product.category))];
 
-  // State for category and search query
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -21,8 +19,8 @@ const Products = () => {
     const fetchSellerProducts = async () => {
       try {
         const response = await databases.listDocuments(
-          "67cad7e600027ac7e8c0", // Replace with your Appwrite database ID
-          "67ea560f00044ac3e66b" // Replace with your Appwrite collection ID
+          "67cad7e600027ac7e8c0", // Database ID
+          "67ea560f00044ac3e66b" // Products collection ID
         );
         setSellerProducts(response.documents);
       } catch (error) {

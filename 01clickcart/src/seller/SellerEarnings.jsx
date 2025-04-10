@@ -33,7 +33,7 @@ const SellerEarnings = () => {
         weekly: data.weekly,
         monthly: data.monthly,
       });
-      setChartData(data.weekly); // default view
+      setChartData(data.weekly); // default
     };
 
     fetchEarnings();

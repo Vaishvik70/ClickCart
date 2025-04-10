@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Client, Databases, ID } from "appwrite";
 
-// Appwrite setup
+
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
 const databases = new Databases(client);

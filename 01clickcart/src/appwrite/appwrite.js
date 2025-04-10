@@ -1,30 +1,27 @@
 import { Client, Account, Databases, Storage, ID, Query, Permission, Role } from "appwrite";
 
-// 🔹 Initialize Appwrite Client
 const client = new Client();
 client
   .setEndpoint("https://cloud.appwrite.io/v1") // Appwrite API endpoint
-  .setProject("67cad786002fe394c8a8"); // Your actual Project ID
+  .setProject("67cad786002fe394c8a8"); //  actual Project ID
 
-// 🔹 Initialize Appwrite Services
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const storage = new Storage(client);
 export { ID, Query };
 
-// 🔹 Appwrite Configurations (Replace with actual IDs)
-const DATABASE_ID = "67cad7e600027ac7e8c0";
-const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04";
-const USER_COLLECTION_ID = "67f75de1003cacd68d8c"; // 👈 Add your User Collection ID
-const PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b";
-const STORAGE_BUCKET_ID = "67cad81f00268d3093c5";
+const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
+const SELLER_COLLECTION_ID = "67ea22e3000a9c49cd04"; // Seller Collection ID
+const USER_COLLECTION_ID = "67f75de1003cacd68d8c"; // User Collection ID
+const PRODUCT_COLLECTION_ID = "67ea560f00044ac3e66b"; // Product Collection ID
+const STORAGE_BUCKET_ID = "67cad81f00268d3093c5"; // Storage Bucket ID
 
 
 // ----------------------------- SELLER FUNCTIONS -----------------------------
 
-/**
- * ✅ Register a new seller
- */
+
+ // ✅ Register a new seller
+
 export const register = async (name, email, password) => {
   try {
     const newUser = await account.create(ID.unique(), email, password, name);
@@ -48,9 +45,9 @@ export const register = async (name, email, password) => {
   }
 };
 
-/**
- * ✅ Login seller
- */
+
+//  ✅ Login seller
+ 
 export const login = async (email, password) => {
   try {
     try {
@@ -72,9 +69,9 @@ export const login = async (email, password) => {
 
 // ----------------------------- USER FUNCTIONS -----------------------------
 
-/**
- * ✅ Register a new user (buyer)
- */
+
+ // ✅ Register a new user 
+ 
 export const userRegister = async (name, email, password) => {
   try {
     const newUser = await account.create(ID.unique(), email, password, name);
@@ -103,9 +100,9 @@ export const userRegister = async (name, email, password) => {
   }
 };
 
-/**
- * ✅ Login user (buyer)
- */
+
+ // ✅ Login user 
+ 
 export const userLogin = async (email, password) => {
   try {
     try {
@@ -127,9 +124,8 @@ export const userLogin = async (email, password) => {
 
 // ----------------------------- COMMON FUNCTIONS -----------------------------
 
-/**
- * ✅ Logout any user (seller or buyer)
- */
+
+ // ✅ Logout 
 export const logout = async () => {
   try {
     await account.deleteSession("current");
@@ -139,9 +135,9 @@ export const logout = async () => {
   }
 };
 
-/**
- * ✅ Get current logged-in user
- */
+
+ // ✅ Get current logged-in user
+ 
 export const getCurrentUser = async () => {
   try {
     const user = await account.get();
@@ -155,9 +151,9 @@ export const getCurrentUser = async () => {
 
 // ----------------------------- PRODUCT FUNCTIONS -----------------------------
 
-/**
- * ✅ Fetch products from Appwrite Database
- */
+
+// ✅ Fetch products from Appwrite Database
+ 
 export const getProducts = async () => {
   try {
     const response = await databases.listDocuments(DATABASE_ID, PRODUCT_COLLECTION_ID);
@@ -169,9 +165,9 @@ export const getProducts = async () => {
   }
 };
 
-/**
- * ✅ Add Product to Database
- */
+
+ // ✅ Add Product to Database
+ 
 export const addProduct = async (product) => {
   try {
     const user = await getCurrentUser(); // get logged-in seller
