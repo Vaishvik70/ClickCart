@@ -24,6 +24,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import BestSelling from "./components/BestSelling";
+import BestSellingProductDetail from "./pages/BestSellingProductDetail";
 import SellerPage from "./pages/SellerPage";
 import FeesAndCommission from "./seller/Fees & Commission";
 import SellerRegister from "./seller/SellerRegister";
@@ -105,6 +106,7 @@ const App = () => {
               </ProtectedUserRoute>
             }
           />
+          <Route path="/product-detail" element={<BestSellingProductDetail />} />
           <Route
             path="/coupons"
             element={

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaCopy, FaCheckCircle } from "react-icons/fa";
 
-const coupons = [
+const couponsList = [
   {
     id: 1,
     code: "WELCOME10",

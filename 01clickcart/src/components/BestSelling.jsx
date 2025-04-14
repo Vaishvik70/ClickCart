@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Example best-selling products data
 const bestSellers = [
   {
     id: "1",
@@ -38,24 +39,10 @@ const bestSellers = [
 
 const BestSellingProducts = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("user"); 
+  const isLoggedIn = !!localStorage.getItem("user");
 
   const handleViewDetails = (productId) => {
-    navigate(`/product/${productId}`);
-  };
-
-  const addToCart = (product) => {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existing = cart.find((item) => item.id === product.id);
-
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert(`${product.name} added to cart!`);
+    navigate("/product-detail", { state: { productId } });  // Pass productId as state
   };
 
   const handleBuyNow = (product) => {
@@ -105,22 +92,10 @@ const BestSellingProducts = () => {
             </button>
 
             <button
-              onClick={() => addToCart(product)}
-              disabled={product.stock === 0}
-              className={`mt-2 w-full py-2 rounded-md text-sm font-medium transition ${
-                product.stock === 0
-                  ? "bg-gray-400 text-white cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 text-white"
-              }`}
-            >
-              Add to Cart
-            </button>
-
-            <button
               onClick={() => handleBuyNow(product)}
-              disabled={!isLoggedIn}
+              disabled={!isLoggedIn || product.stock === 0}
               className={`mt-2 w-full py-2 rounded-md text-sm font-medium transition ${
-                isLoggedIn
+                isLoggedIn && product.stock > 0
                   ? "bg-red-500 hover:bg-red-600 text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }`}
