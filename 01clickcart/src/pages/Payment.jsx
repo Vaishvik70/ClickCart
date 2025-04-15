@@ -164,7 +164,7 @@ export default function Payment() {
                   <h3 className="font-medium">{product.name}</h3>
                   <div className="flex justify-between mt-2">
                     <span className="text-gray-500">Price:</span>
-                    <span>₹{product.price.toFixed(2)}</span>
+                    <span>₹{Number(product.price).toFixed(2)}</span>
                   </div>
                   {product.discount > 0 && (
                     <div className="flex justify-between">
@@ -250,7 +250,7 @@ export default function Payment() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal:</span>
-                <span>₹{totalPriceBeforeDiscount.toFixed(2)}</span>
+                <span>₹{Number(totalPriceBeforeDiscount || 0).toFixed(2)}</span>
               </div>
               {appliedCoupon && (
                 <div className="flex justify-between">

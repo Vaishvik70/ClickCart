@@ -1,11 +1,14 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiCheck, FiAlertCircle } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { account } from "../appwrite/appwriteConfig"
 
 const BestSellingProductDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { productId } = location.state || {};
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Check if productId is provided
   if (!productId) {
@@ -25,6 +28,19 @@ const BestSellingProductDetail = () => {
       </div>
     );
   }
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const user = await account.get();
+        setIsLoggedIn(true);
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
+    };
+  
+    getUser();
+  }, []);
 
   const bestSellers = [
     {
@@ -186,17 +202,17 @@ const BestSellingProductDetail = () => {
               </div>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={handleBuyNow}
-                  disabled={product.stock === 0}
-                  className={`flex-1 px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white ${
-                    product.stock > 0
-                      ? "bg-red-600 hover:bg-red-700"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  Buy Now
-                </button>
+              <button
+                onClick={handleBuyNow}
+                disabled={!isLoggedIn || product.stock === 0}
+                className={`flex-1 px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white ${
+                  !isLoggedIn || product.stock === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+                }`}
+              >
+                {isLoggedIn ? "Buy Now" : "Login to Buy"}
+              </button>
               </div>
             </div>
           </div>

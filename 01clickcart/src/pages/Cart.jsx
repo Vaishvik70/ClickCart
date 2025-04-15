@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Client, Databases } from "appwrite";
+import { Client, Databases, Account } from "appwrite";
+
 
 const client = new Client();
 client
   .setEndpoint("https://cloud.appwrite.io/v1")
   .setProject("67cad786002fe394c8a8");
-
+  const account = new Account(client);
 const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const COLLECTION_ID = "67cad7ff0005fc97c570"; // Cart collection ID
@@ -15,11 +16,22 @@ export default function Cart() {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchCart();
+    checkUserSession();
   }, []);
+
+  const checkUserSession = async () => {
+    try {
+      await account.get(); // Checks if a session exists
+      setIsLoggedIn(true);
+    } catch {
+      setIsLoggedIn(false);
+    }
+  };
 
   const fetchCart = async () => {
     setLoading(true);
@@ -154,15 +166,21 @@ export default function Cart() {
             </button>
             
             <button
-              onClick={() => navigate("/payment", { state: { cart } })}
-              className={`py-2 px-6 rounded ${
-                cart.length === 0
+              onClick={() => {
+                if (isLoggedIn) {
+                  navigate("/payment", { state: { cart } });
+                } else {
+                  navigate("/login");
+                }
+              }}
+                className={`py-2 px-6 rounded ${
+                  cart.length === 0 || !isLoggedIn
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-red-500 hover:bg-red-600 text-white"
-              }`}
-              disabled={cart.length === 0}
+                }`}
+              disabled={cart.length === 0 || !isLoggedIn}
             >
-              Proceed to Checkout
+              {isLoggedIn ? "Proceed to Checkout" : "Login to Checkout"}
             </button>
           </div>
         </div>

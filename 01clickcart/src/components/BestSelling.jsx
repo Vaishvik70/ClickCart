@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFire, FaStar, FaShoppingCart } from "react-icons/fa";
+import { account } from "../appwrite/appwriteConfig"; 
 
 const bestSellers = [
   {
@@ -13,75 +14,100 @@ const bestSellers = [
     stock: 15,
     rating: 4.8,
     reviews: 125,
-    features: ["Noise Cancelling", "30hr Battery", "Bluetooth 5.0"]
+    features: ["Noise Cancelling", "30hr Battery", "Bluetooth 5.0"],
   },
   {
     id: "2",
     name: "Smart Fitness Watch Pro",
-    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSG6WTcrt627nj-iXl7flTB7yhJO7QDdUyPm4edjnoGTrB--yqazsDIlrvQpTjvLHV4CLoYrigzJNTaShu9Bx2Gg814PE38ZFwnSm5HTG5u",
+    image:
+      "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSG6WTcrt627nj-iXl7flTB7yhJO7QDdUyPm4edjnoGTrB--yqazsDIlrvQpTjvLHV4CLoYrigzJNTaShu9Bx2Gg814PE38ZFwnSm5HTG5u",
     price: 3499,
     originalPrice: 4499,
     salesCount: 180,
     stock: 0,
     rating: 4.6,
     reviews: 89,
-    features: ["Heart Rate Monitor", "Waterproof", "1.4\" AMOLED"]
+    features: ["Heart Rate Monitor", "Waterproof", '1.4" AMOLED'],
   },
   {
     id: "3",
     name: "Portable Bluetooth Speaker",
-    image: "https://m.media-amazon.com/images/I/41yQZFhJ-dL._SY300_SX300_QL70_FMwebp_.jpg",
+    image:
+      "https://m.media-amazon.com/images/I/41yQZFhJ-dL._SY300_SX300_QL70_FMwebp_.jpg",
     price: 1999,
     originalPrice: 2599,
     salesCount: 300,
     stock: 5,
     rating: 4.7,
     reviews: 210,
-    features: ["20W Output", "IPX7 Waterproof", "24hr Playtime"]
+    features: ["20W Output", "IPX7 Waterproof", "24hr Playtime"],
   },
   {
     id: "4",
     name: "Adjustable Laptop Stand",
-    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSDcaUBX4eSpvrNjqWhjPHTqhcPPelimQ3yRAGJpp3uimsdWpb9k74x3RwrCmyjjsLOE_sYoqojLQU1w-Inuiy1jXp9MoYJmTsA8vzz3xzHm6NTIoTGald6NQ",
+    image:
+      "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSDcaUBX4eSpvrNjqWhjPHTqhcPPelimQ3yRAGJpp3uimsdWpb9k74x3RwrCmyjjsLOE_sYoqojLQU1w-Inuiy1jXp9MoYJmTsA8vzz3xzHm6NTIoTGald6NQ",
     price: 899,
     originalPrice: 1299,
     salesCount: 120,
     stock: 10,
     rating: 4.5,
     reviews: 56,
-    features: ["Ergonomic Design", "Aluminum Alloy", "360° Rotation"]
+    features: ["Ergonomic Design", "Aluminum Alloy", "360° Rotation"],
   },
 ];
 
 const BestSellingProducts = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("user");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        await account.get();
+        setIsLoggedIn(true);
+      } catch (err) {
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkUser();
+  }, []);
 
   const handleViewDetails = (productId) => {
     navigate("/product-detail", { state: { productId } });
   };
 
   const handleBuyNow = (product) => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    if (product.stock === 0) {
+      return;
+    }
     navigate("/payment", { state: { product } });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-12">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-full mb-4">
             <FaFire className="mr-2" />
             <span className="font-bold">BEST SELLERS</span>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Our Most Popular Products</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Our Most Popular Products
+          </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover what everyone is loving. These top-rated products are flying off our shelves!
+            Discover what everyone is loving. These top-rated products are
+            flying off our shelves!
           </p>
         </div>
 
-        {/* Products Grid */}
+        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {bestSellers.map((product, index) => (
             <div
@@ -100,7 +126,7 @@ const BestSellingProducts = () => {
                 )}
               </div>
 
-              {/* Product Image */}
+              {/* Image */}
               <div className="relative h-64 overflow-hidden">
                 <img
                   src={product.image}
@@ -113,13 +139,16 @@ const BestSellingProducts = () => {
                       ₹{product.originalPrice.toLocaleString("en-IN")}
                     </span>
                     <span className="text-yellow-400 font-bold">
-                      {Math.round(100 - (product.price / product.originalPrice * 100))}% OFF
+                      {Math.round(
+                        100 - (product.price / product.originalPrice) * 100
+                      )}
+                      % OFF
                     </span>
                   </div>
                 )}
               </div>
 
-              {/* Product Details */}
+              {/* Details */}
               <div className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="text-lg font-bold text-gray-900 truncate">
@@ -127,7 +156,9 @@ const BestSellingProducts = () => {
                   </h2>
                   <div className="flex items-center bg-blue-50 px-2 py-1 rounded">
                     <FaStar className="text-yellow-400 mr-1" />
-                    <span className="text-sm font-semibold">{product.rating}</span>
+                    <span className="text-sm font-semibold">
+                      {product.rating}
+                    </span>
                   </div>
                 </div>
 
@@ -140,7 +171,6 @@ const BestSellingProducts = () => {
                   </span>
                 </div>
 
-                {/* Features List */}
                 <ul className="text-xs text-gray-600 mb-4 space-y-1">
                   {product.features.slice(0, 3).map((feature, i) => (
                     <li key={i} className="flex items-center">
@@ -150,13 +180,17 @@ const BestSellingProducts = () => {
                   ))}
                 </ul>
 
-                {/* Stock Status */}
                 {product.stock > 0 ? (
                   <div className="mb-4">
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
-                        style={{ width: `${Math.min(100, (product.stock / 20) * 100)}%` }}
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            (product.stock / 20) * 100
+                          )}%`,
+                        }}
                       ></div>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
@@ -164,10 +198,12 @@ const BestSellingProducts = () => {
                     </p>
                   </div>
                 ) : (
-                  <p className="text-red-500 text-sm mb-4">Currently unavailable</p>
+                  <p className="text-red-500 text-sm mb-4">
+                    Currently unavailable
+                  </p>
                 )}
 
-                {/* Action Buttons */}
+                {/* Buttons */}
                 <div className="flex space-x-2">
                   <button
                     onClick={() => handleViewDetails(product.id)}
@@ -178,7 +214,7 @@ const BestSellingProducts = () => {
                   <button
                     onClick={() => handleBuyNow(product)}
                     disabled={!isLoggedIn || product.stock === 0}
-                    className={`flex-1 py-2 rounded-md text-sm font-medium transition flex items-center justify-center ${
+                    className={`flex-1 py-2 rounded-md text-sm font-medium transition flex items-center justify-center relative group ${
                       isLoggedIn && product.stock > 0
                         ? "bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -186,6 +222,12 @@ const BestSellingProducts = () => {
                   >
                     <FaShoppingCart className="mr-2" />
                     Buy Now
+
+                    {!isLoggedIn && (
+                      <div className="absolute bottom-full mb-1 text-xs text-red-600 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition">
+                        Please login to purchase
+                      </div>
+                    )}
                   </button>
                 </div>
               </div>

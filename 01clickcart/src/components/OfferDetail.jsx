@@ -1,95 +1,182 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { account } from "../appwrite/appwriteConfig";
+import { AiOutlineLoading3Quarters, AiOutlineArrowLeft } from "react-icons/ai";
+import { FiShoppingCart, FiAlertCircle } from "react-icons/fi";
 
 const offersWithProducts = {
-  1: [
-    {
-      id: 1,
-      image: "https://cdn.shopify.com/s/files/1/0356/9850/7909/files/zeb-Gemini-banner8.jpg?v=1697106712",
-      title: "Smartwatch",
-      price: 2000,
-      discount: 50,
-    },
-    {
-      id: 2,
-      image: "https://oneclickshopping.pk/wp-content/uploads/2022/03/Untitled-1_1-379.jpg",
-      title: "Fitness Band",
-      price: 1500,
-      discount: 40,
-    },
-  ],
-  2: [
-    {
-      id: 3,
-      image: "https://m.media-amazon.com/images/I/41JACWT-wWL._AC_UF1000,1000_QL80_.jpg",
-      title: "Wireless Headphones",
-      price: 3000,
-      discount: 50,
-    },
-    {
-      id: 4,
-      image: "https://m.media-amazon.com/images/I/61Sst7zTNCL.jpg",
-      title: "Gaming Headset",
-      price: 4000,
-      discount: 35,
-    },
-  ],
-  3: [
-    {
-      id: 5,
-      image: "https://m.media-amazon.com/images/I/51LxT4iSWPL._AC_UY350_.jpg",
-      title: "Kurti",
-      price: 2000,
-      discount: 45,
-    },
-    {
-      id: 6,
-      image: "https://m.media-amazon.com/images/I/81z2IicIjUL._AC_UY1100_.jpg",
-      title: "Shirt",
-      price: 3000,
-      discount: 30,
-    },
-  ],
-  4: [
-    {
-      id: 7,
-      image: "https://images-eu.ssl-images-amazon.com/images/I/81+ceFx9BcL._AC_UL900_SR900,600_.jpg",
-      title: "Crime Fiction",
-      price: 300,
-      discount: 45,
-    },
-    {
-      id: 8,
-      image: "https://m.media-amazon.com/images/I/71K58ScrmbL._AC_UL480_QL65_.jpg",
-      title: "Economics Fiction",
-      price: 700,
-      discount: 50,
-    },
-  ],
-};
-
-const getDiscountedPrice = (price, discount) => {
-  return (price - (price * discount) / 100).toFixed(2);
+  1: {
+    name: "Electronics Special",
+    banner: "https://example.com/electronics-banner.jpg",
+    products: [
+      {
+        id: 1,
+        image: "https://cdn.shopify.com/s/files/1/0356/9850/7909/files/zeb-Gemini-banner8.jpg?v=1697106712",
+        title: "Smartwatch Pro",
+        price: 2000,
+        discount: 50,
+        description: "Advanced smartwatch with health monitoring and 7-day battery life",
+        rating: 4.5,
+        reviews: 128
+      },
+      {
+        id: 2,
+        image: "https://oneclickshopping.pk/wp-content/uploads/2022/03/Untitled-1_1-379.jpg",
+        title: "Fitness Band X",
+        price: 1500,
+        discount: 40,
+        description: "Lightweight fitness tracker with heart rate monitoring",
+        rating: 4.2,
+        reviews: 86
+      }
+    ]
+  },
+  2: {
+    name: "Audio Deals",
+    banner: "https://example.com/audio-banner.jpg",
+    products: [
+      {
+        id: 3,
+        image: "https://m.media-amazon.com/images/I/41JACWT-wWL._AC_UF1000,1000_QL80_.jpg",
+        title: "Wireless Headphones",
+        price: 3000,
+        discount: 50,
+        description: "Premium noise-cancelling headphones with 30hr battery life",
+        rating: 4.7,
+        reviews: 215
+      },
+      {
+        id: 4,
+        image: "https://m.media-amazon.com/images/I/61Sst7zTNCL.jpg",
+        title: "Gaming Headset",
+        price: 4000,
+        discount: 35,
+        description: "Surround sound gaming headset with mic",
+        rating: 4.3,
+        reviews: 152
+      }
+    ]
+  },
+  3: {
+    name: "Fashion Collection",
+    banner: "https://example.com/fashion-banner.jpg",
+    products: [
+      {
+        id: 5,
+        image: "https://m.media-amazon.com/images/I/51LxT4iSWPL._AC_UY350_.jpg",
+        title: "Designer Kurti",
+        price: 2000,
+        discount: 45,
+        description: "Handcrafted cotton kurti with embroidery",
+        rating: 4.1,
+        reviews: 64
+      },
+      {
+        id: 6,
+        image: "https://m.media-amazon.com/images/I/81z2IicIjUL._AC_UY1100_.jpg",
+        title: "Premium Shirt",
+        price: 3000,
+        discount: 30,
+        description: "Formal shirt with wrinkle-free fabric",
+        rating: 4.4,
+        reviews: 93
+      }
+    ]
+  },
+  4: {
+    name: "Book Bonanza",
+    banner: "https://example.com/books-banner.jpg",
+    products: [
+      {
+        id: 7,
+        image: "https://images-eu.ssl-images-amazon.com/images/I/81+ceFx9BcL._AC_UL900_SR900,600_.jpg",
+        title: "Crime Fiction",
+        price: 300,
+        discount: 45,
+        description: "Bestselling crime thriller novel",
+        rating: 4.8,
+        reviews: 342
+      },
+      {
+        id: 8,
+        image: "https://m.media-amazon.com/images/I/71K58ScrmbL._AC_UL480_QL65_.jpg",
+        title: "Economics Fiction",
+        price: 700,
+        discount: 50,
+        description: "Award-winning economic theory novel",
+        rating: 4.6,
+        reviews: 178
+      }
+    ]
+  }
 };
 
 const OfferDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
 
-  const isLoggedIn = !!localStorage.getItem("user");
-  const products = offersWithProducts[parseInt(id)] || [];
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        await account.get();
+        setIsLoggedIn(true);
+        // Load cart from localStorage
+        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCart(savedCart);
+      } catch (error) {
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
 
-  if (products.length === 0) {
+  const currentOffer = offersWithProducts[id];
+  const products = currentOffer?.products || [];
+
+  const addToCart = (product) => {
+    const existingItem = cart.find(item => item.id === product.id);
+    let updatedCart;
+    
+    if (existingItem) {
+      updatedCart = cart.map(item => 
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+    } else {
+      updatedCart = [...cart, { ...product, quantity: 1 }];
+    }
+    
+    setCart(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    alert(`${product.title} added to cart!`);
+  };
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
-          <h2 className="text-red-500 text-2xl font-bold mb-4">No Products Found</h2>
-          <p className="text-gray-600 mb-6">We couldn't find any products for this offer.</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <AiOutlineLoading3Quarters className="animate-spin text-4xl text-blue-600" />
+      </div>
+    );
+  }
+
+  if (!currentOffer) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="max-w-md text-center p-6 bg-white rounded-lg shadow">
+          <FiAlertCircle className="mx-auto text-5xl text-red-500 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Offer Not Found</h2>
+          <p className="text-gray-600 mb-6">
+            The offer you're looking for doesn't exist or has expired.
+          </p>
           <button
             onClick={() => navigate("/")}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
+            className="flex items-center justify-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            Back to Home
+            <AiOutlineArrowLeft /> Back to Home
           </button>
         </div>
       </div>
@@ -97,85 +184,80 @@ const OfferDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+          >
+            <AiOutlineArrowLeft /> Back to Offers
+          </button>
+        </div>
+
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Special Offers
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            {currentOffer.name}
           </h1>
-          <p className="mt-3 text-xl text-gray-500">
-            Don't miss these limited-time deals
+          <p className="text-lg text-gray-600">
+            Limited time offer - Save big on these products!
           </p>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <div key={product.id} className="group">
-              <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-full h-60 object-contain object-center group-hover:opacity-75 bg-white p-4"
-                />
-              </div>
-              <div className="mt-4 bg-white p-4 rounded-b-lg shadow-sm">
-                <h3 className="text-lg font-medium text-gray-900">{product.title}</h3>
-                
-                {/* Pricing */}
-                <div className="mt-2">
-                  <div className="flex items-center">
-                    <p className="text-lg font-semibold text-gray-900">
-                      ₹{getDiscountedPrice(product.price, product.discount)}
-                    </p>
-                    <p className="ml-2 text-sm text-gray-500 line-through">
-                      ₹{product.price}
-                    </p>
-                    <span className="ml-auto bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map((product) => {
+            const discountedPrice = product.price - (product.price * product.discount) / 100;
+            
+            return (
+              <div 
+                key={product.id} 
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+              >
+                <div className="h-64 overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-contain p-4"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{product.title}</h3>
+                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <span className="text-2xl font-bold text-red-600">
+                        ₹{discountedPrice.toFixed(2)}
+                      </span>
+                      <span className="ml-2 text-gray-500 line-through">
+                        ₹{product.price.toFixed(2)}
+                      </span>
+                    </div>
+                    <span className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded">
                       {product.discount}% OFF
                     </span>
                   </div>
-                </div>
 
-                {/* Buttons */}
-                <div className="mt-4 space-y-2">
                   {isLoggedIn ? (
-                    <>
+                    <div className="flex gap-3">
                       <button
                         onClick={() => navigate("/payment", { state: { product } })}
-                        className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                        </svg>
                         Buy Now
                       </button>
-                    </>
+                    </div>
                   ) : (
-                    <div className="text-center py-3">
-                      <p className="text-sm text-red-600">
-                        Please login to purchase
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                      <p className="text-yellow-700 flex items-center gap-2">
+                        <FiAlertCircle /> Please login to purchase
                       </p>
                     </div>
                   )}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Back Button */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => navigate("/")}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-            </svg>
-            Back to Home
-          </button>
+            );
+          })}
         </div>
       </div>
     </div>
