@@ -76,84 +76,107 @@ const OfferDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem("user"); // Check if user is logged in
-
+  const isLoggedIn = !!localStorage.getItem("user");
   const products = offersWithProducts[parseInt(id)] || [];
-
-  const handleAddToCart = (product) => {
-    const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    cartItems.push(product);
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-    alert("✅ Product added to cart!");
-  };
 
   if (products.length === 0) {
     return (
-      <div className="text-center mt-10">
-        <h2 className="text-red-500 text-2xl">⚠ No Products Found for this Offer!</h2>
-        <button
-          onClick={() => navigate("/")}
-          className="mt-4 bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition"
-        >
-          ⬅ Back to Home
-        </button>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-red-500 text-2xl font-bold mb-4">No Products Found</h2>
+          <p className="text-gray-600 mb-6">We couldn't find any products for this offer.</p>
+          <button
+            onClick={() => navigate("/")}
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
+          >
+            Back to Home
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">🔥 Offer Details 🔥</h1>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Special Offers
+          </h1>
+          <p className="mt-3 text-xl text-gray-500">
+            Don't miss these limited-time deals
+          </p>
+        </div>
 
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product.id} className="bg-gray-100 p-4 rounded-lg shadow-lg">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-full h-60 object-contain rounded-md bg-white p-2"
-            />
-            <h2 className="text-xl font-semibold mt-2">{product.title}</h2>
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          {products.map((product) => (
+            <div key={product.id} className="group">
+              <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-60 object-contain object-center group-hover:opacity-75 bg-white p-4"
+                />
+              </div>
+              <div className="mt-4 bg-white p-4 rounded-b-lg shadow-sm">
+                <h3 className="text-lg font-medium text-gray-900">{product.title}</h3>
+                
+                {/* Pricing */}
+                <div className="mt-2">
+                  <div className="flex items-center">
+                    <p className="text-lg font-semibold text-gray-900">
+                      ₹{getDiscountedPrice(product.price, product.discount)}
+                    </p>
+                    <p className="ml-2 text-sm text-gray-500 line-through">
+                      ₹{product.price}
+                    </p>
+                    <span className="ml-auto bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                      {product.discount}% OFF
+                    </span>
+                  </div>
+                </div>
 
-            {/* Pricing Section */}
-            <p className="text-red-500 font-bold text-lg">
-              ₹{getDiscountedPrice(product.price, product.discount)} <span className="text-sm">after discount</span>
-            </p>
-            <p className="text-gray-500 line-through">₹{product.price}</p>
-            <p className="text-green-600 font-bold">{product.discount}% OFF</p>
-
-            <div className="mt-4 flex flex-col gap-2">
-              {isLoggedIn ? (
-                <>
-                  <button 
-                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    🛒 Add to Cart
-                  </button>
-                  <button 
-                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-                    onClick={() => navigate("/payment", { state: { product } })}
-                  >
-                    💳 Buy Now
-                  </button>
-                </>
-              ) : (
-                <p className="text-red-600 font-medium text-center">⚠ Please login to use cart and buy features!</p>
-              )}
+                {/* Buttons */}
+                <div className="mt-4 space-y-2">
+                  {isLoggedIn ? (
+                    <>
+                      <button
+                        onClick={() => navigate("/payment", { state: { product } })}
+                        className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                        Buy Now
+                      </button>
+                    </>
+                  ) : (
+                    <div className="text-center py-3">
+                      <p className="text-sm text-red-600">
+                        Please login to purchase
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div className="mt-8 text-center">
-        <button 
-          onClick={() => navigate("/")} 
-          className="bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition"
-        >
-          ⬅ Back to Home
-        </button>
+        {/* Back Button */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => navigate("/")}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Back to Home
+          </button>
+        </div>
       </div>
     </div>
   );

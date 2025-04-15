@@ -2,13 +2,22 @@ import React, { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 
-export default function Receipt() {
-  const location = useLocation();
+const Receipt = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const { formData, product, cart, totalPriceAfterDiscount } = location.state || {};
   const receiptRef = useRef();
 
-  // Download PDF handler
+  const formData = state?.formData || {
+    name: state?.fullName || "",
+    address: state?.address || "",
+    phone: state?.phoneNumber || "",
+    paymentMethod: state?.paymentId || "",
+  };
+
+  const product = state?.product;
+  const cart = state?.cart || [];
+  const totalPrice = state?.totalPriceAfterDiscount || 0;
+
   const handleDownloadPDF = () => {
     const element = receiptRef.current;
     const options = {
@@ -21,21 +30,21 @@ export default function Receipt() {
     html2pdf().set(options).from(element).save();
   };
 
-  // Share handler
   const handleShare = async () => {
     const details = `
 🧾 *Click Cart Payment Receipt*
 
-👤 *Name:* ${formData?.name}
-🏠 *Address:* ${formData?.address}
-📞 *Phone:* ${formData?.phone}
-💳 *Payment:* ${formData?.paymentMethod}
+👤 *Name:* ${formData.name}
+🏠 *Address:* ${formData.address}
+📞 *Phone:* ${formData.phone}
+💳 *Payment:* ${formData.paymentMethod}
 
 🛍️ *Products:*
-${product ? `${product.name} - ₹${product.price}` :
-      cart?.map(item => `${item.name} x ${item.quantity} - ₹${item.price}`).join("\n")}
+${product
+        ? `${product.name} - ₹${product.price}`
+        : cart.map((item) => `${item.name} x ${item.quantity} - ₹${item.price}`).join("\n")}
 
-💰 *Total:* ₹${Math.round(totalPriceAfterDiscount).toLocaleString("en-IN")}
+💰 *Total:* ₹${Math.round(totalPrice).toLocaleString("en-IN")}
     `;
 
     try {
@@ -53,37 +62,65 @@ ${product ? `${product.name} - ₹${product.price}` :
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto border rounded-lg shadow-lg bg-white">
+    <div className="p-6 max-w-4xl mx-auto border rounded-lg shadow-lg bg-white">
       <div ref={receiptRef}>
-        <h1 className="text-2xl font-bold text-center mb-4">Payment Receipt</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 flex items-center justify-center gap-2">
+          <span role="img" aria-label="receipt">🧾</span> Payment Receipt
+        </h1>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold">Customer Details</h2>
-          <p><strong>Name:</strong> {formData?.name}</p>
-          <p><strong>Address:</strong> {formData?.address}</p>
-          <p><strong>Phone:</strong> {formData?.phone}</p>
-          <p><strong>Payment Method:</strong> {formData?.paymentMethod}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Customer Details</h2>
+            <p><strong>Name:</strong> {formData.name}</p>
+            <p><strong>Address:</strong> {formData.address}</p>
+            <p><strong>Phone:</strong> {formData.phone}</p>
+            <p><strong>Payment Method:</strong> {formData.paymentMethod}</p>
+          </div>
         </div>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold">Products Purchased</h2>
-          {product ? (
-            <div className="border p-2 rounded mb-2">
-              <p><strong>{product.name}</strong> - ₹{Math.round(product.price).toLocaleString("en-IN")}</p>
-            </div>
-          ) : cart ? (
-            cart.map((item) => (
-              <div key={item.id || item.$id} className="border p-2 rounded mb-2">
-                <p><strong>{item.name}</strong> - ₹{Math.round(item.price).toLocaleString("en-IN")} x {item.quantity}</p>
-              </div>
-            ))
+        <div>
+          <h2 className="text-xl font-semibold mb-2">Products Purchased</h2>
+          {product || cart.length > 0 ? (
+            <table className="w-full text-left border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 border">Image</th>
+                  <th className="p-2 border">Name</th>
+                  <th className="p-2 border">Qty</th>
+                  <th className="p-2 border">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product ? (
+                  <tr>
+                    <td className="p-2 border">
+                      <img src={product.image} alt={product.name} className="h-16 object-contain" />
+                    </td>
+                    <td className="p-2 border">{product.name || "Unnamed Product"}</td>
+                    <td className="p-2 border">1</td>
+                    <td className="p-2 border">₹{Math.round(product.price)}</td>
+                  </tr>
+                ) : (
+                  cart.map((item, index) => (
+                    <tr key={item.id || item.$id || index}>
+                      <td className="p-2 border">
+                        <img src={item.image} alt={item.name} className="h-16 object-contain" />
+                      </td>
+                      <td className="p-2 border">{item.name || "Unnamed Item"}</td>
+                      <td className="p-2 border">{item.quantity}</td>
+                      <td className="p-2 border">₹{Math.round(item.price)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           ) : (
             <p>No products available.</p>
           )}
         </div>
 
-        <h2 className="text-xl font-bold">
-          Total Price: ₹{Math.round(totalPriceAfterDiscount).toLocaleString("en-IN")}
+        <h2 className="text-2xl font-bold mt-6 text-right">
+          Total Price: ₹{Math.round(totalPrice).toLocaleString("en-IN")}
         </h2>
       </div>
 
@@ -111,4 +148,6 @@ ${product ? `${product.name} - ₹${product.price}` :
       </button>
     </div>
   );
-}
+};
+
+export default Receipt;

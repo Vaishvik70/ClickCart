@@ -36,6 +36,7 @@ import SellerOrders from "./seller/SellerOrders";
 import SellerEarnings from "./seller/SellerEarnings";
 import MyProducts from "./seller/MyProducts";
 import EditProduct from "./seller/EditProduct";
+import SellerForgotPassword from "./seller/SellerForgotPassword";
 import Coupons from "./pages/Coupons";
 import "./index.css";
 
@@ -119,6 +120,10 @@ const App = () => {
           <Route path="/fees-commission" element={<FeesAndCommission />} />
           <Route path="/seller-register" element={<SellerRegister />} />
           <Route path="/seller-login" element={<SellerLogin />} />
+          <Route
+            path="/seller-forgot-password"
+            element={<SellerForgotPassword />}
+          />
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/seller-help" element={<SellerHelpPage />} />
           <Route path="/seller-dashboard" element={<SellerDashboard />} />

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.6.1",
     "appwrite": "^17.0.1",
     "framer-motion": "^12.5.0",

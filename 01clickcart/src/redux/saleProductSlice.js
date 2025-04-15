@@ -30,6 +30,20 @@ const initialState = {
       price: 549,
       discount: 15,
     },
+    {
+      id: "5",
+      image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRVKEqvgqQMxX9rIJ7Ki9lB6ImUeyTcaVpaXXNHd2_Dw1HFFtDvvSEhLGXo_vSuOOiN6u_u9h3Lsu8RnrozYFYNfIHMsagxQq7kOl4tVvGJJctghvOpmIO_lA",
+      title: "Headphones",
+      price: 1599,
+      discount: 15,
+    },
+    {
+      id: "6",
+      image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRTzYK-lkKSKO-Exoz3QohRKth3399_xAKb218ZmUVsHN0bWkVvsTK378p73rmz_nxRt94_zDEWL5R2xHUay6k8bpMI1sjc2kKrCwcYyzAnjK9SX5q5f9Fx&usqp=CAc",
+      title: "Mobile Phone",
+      price: 10000,
+      discount: 15,
+    },
   ],
 };
 
