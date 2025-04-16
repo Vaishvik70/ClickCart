@@ -96,7 +96,7 @@ ${product
                     <td className="p-2 border">
                       <img src={product.image} alt={product.name} className="h-16 object-contain" />
                     </td>
-                    <td className="p-2 border">{product.name || "Unnamed Product"}</td>
+                    <td className="p-2 border">{product.name || product.title || "Unnamed Product"}</td>
                     <td className="p-2 border">1</td>
                     <td className="p-2 border">₹{Math.round(product.price)}</td>
                   </tr>

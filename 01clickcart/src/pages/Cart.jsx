@@ -119,7 +119,7 @@ export default function Cart() {
                 className="w-24 h-24 object-cover rounded" 
               />
               <div className="flex-1 w-full">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
+                <h2 className="text-lg font-semibold">{item.name || item.title || "Unnamed Item"}</h2>
                 <p className="text-gray-600">₹{item.price.toFixed(2)}</p>
                 <div className="flex items-center space-x-2 mt-2">
                   <button

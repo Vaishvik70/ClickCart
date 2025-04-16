@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Client, Databases } from "appwrite";
+import { Client, Databases, Account, Query } from "appwrite";
 
 const client = new Client();
 client
@@ -9,6 +9,8 @@ const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0"; // Database ID
 const COLLECTION_ID = "67d17f5a0025aee3e9f6"; // History Collection ID
 
+const account = new Account(client);
+
 export default function History() {
   const [orders, setOrders] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
@@ -16,30 +18,38 @@ export default function History() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const user = await account.get();
+        const userId = user.$id;
+  
+        const response = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTION_ID,
+          [Query.equal("userId", userId)]
+        );
+  
+        const formattedOrders = response.documents
+          .map((order) => ({
+            ...order,
+            products: JSON.parse(order.products || "[]"),
+            date: order.date ? new Date(order.date).toLocaleString() : "N/A",
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+        setOrders(formattedOrders);
+        findBestSellers(formattedOrders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setError("Failed to load orders. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
     fetchOrders();
   }, []);
-
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
-      const formattedOrders = response.documents
-        .map((order) => ({
-          ...order,
-          products: JSON.parse(order.products || "[]"),
-          date: order.date ? new Date(order.date).toLocaleString() : "N/A",
-        }))
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      setOrders(formattedOrders);
-      findBestSellers(formattedOrders);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      setError("Failed to load orders. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const deleteOrder = async (orderId) => {
     if (!window.confirm("Are you sure you want to delete this order?")) return;
@@ -184,7 +194,7 @@ export default function History() {
                             <div className="ml-4 flex-1">
                               <div className="flex items-center justify-between">
                                 <h5 className="text-sm font-medium text-gray-900">
-                                  {item.name}
+                                  {item.name || item.title || "Unnamed Item"}
                                 </h5>
                                 <p className="text-sm font-medium text-gray-900">
                                   ₹{item.price}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Client, Databases, ID } from "appwrite";
+import { Client, Databases, ID, Account } from "appwrite";
 
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject("67cad786002fe394c8a8");
@@ -8,6 +8,8 @@ const databases = new Databases(client);
 const DATABASE_ID = "67cad7e600027ac7e8c0";
 const COLLECTION_ID = "67cad7ff0005fc97c570"; // Cart collection ID
 const HISTORY_COLLECTION_ID = "67d17f5a0025aee3e9f6";
+
+const account = new Account(client);
 
 const COUPONS = {
   WELCOME10: { type: "percentage", value: 10, description: "10% off on first order" },
@@ -18,6 +20,16 @@ const COUPONS = {
   CLICKFEST50: { type: "flat", value: 50, description: "Flat ₹50 off above ₹1000" },
   NEWUSER100: { type: "flat", value: 100, description: "₹100 off for new users" },
   EXTRA5: { type: "percentage", value: 5, description: "Extra 5% off for prepaid" },
+};
+
+const getUserId = async () => {
+  try {
+    const user = await account.get();
+    return user.$id;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
 };
 
 export default function Payment() {
@@ -82,27 +94,32 @@ export default function Payment() {
     ? calculateFinalPrice(product)
     : cart?.reduce((total, item) => total + calculateFinalPrice(item) * item.quantity, 0) || 0;
 
-  const saveOrderToHistory = async () => {
-    try {
-      const orderData = {
-        name: formData.name,
-        paymentMethod: formData.paymentMethod,
-        totalPrice: Math.round(totalPriceAfterDiscount),
-        date: new Date().toISOString(),
-        products: JSON.stringify(
-          cart?.map((item) => ({
-            name: item.name,
-            price: calculateFinalPrice(item),
-            quantity: item.quantity,
-            image: item.image || "",
-          })) || [product]
-        ),
-      };
-      await databases.createDocument(DATABASE_ID, HISTORY_COLLECTION_ID, ID.unique(), orderData);
-    } catch (error) {
-      console.error("Error saving order:", error);
-    }
-  };
+    const saveOrderToHistory = async () => {
+      try {
+        const user = await account.get(); // ✅ fetch current user
+        const userId = user.$id;
+    
+        const orderData = {
+          userId, // ✅ include userId here
+          name: formData.name,
+          paymentMethod: formData.paymentMethod,
+          totalPrice: Math.round(totalPriceAfterDiscount),
+          date: new Date().toLocaleDateString("en-GB").split("/").join("-"),
+          products: JSON.stringify(
+            cart?.map((item) => ({
+              name: item.name || item.title || "Unnamed Product",
+              price: calculateFinalPrice(item),
+              quantity: item.quantity,
+              image: item.image || "",
+            })) || [product]
+          ),
+        };
+    
+        await databases.createDocument(DATABASE_ID, HISTORY_COLLECTION_ID, ID.unique(), orderData);
+      } catch (error) {
+        console.error("Error saving order:", error);
+      }
+    };
 
   const clearCart = async () => {
     try {
@@ -157,11 +174,11 @@ export default function Payment() {
               <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-50 rounded-lg mb-4">
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={product.name || product.title || "Product Image"}
                   className="w-24 h-24 object-contain rounded-md"
                 />
                 <div className="flex-1">
-                  <h3 className="font-medium">{product.name}</h3>
+                  <h3 className="font-medium">{product.name || product.title || "Unnamed Product"}</h3>
                   <div className="flex justify-between mt-2">
                     <span className="text-gray-500">Price:</span>
                     <span>₹{Number(product.price).toFixed(2)}</span>
